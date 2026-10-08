@@ -20,11 +20,11 @@ class User extends Authenticatable
         'password',
     ];
 
-    // public function operasional(){
-    //     return $this->hasMany(operasional::class, 'users_id');
-    // }
+    public function operasional(){
+        return $this->hasMany(Operasional::class, 'users_id');
+    }
 
-    // public function transaksi(){
-    //     return $this->hasMany(transaksi::class,'users_id');
-    // }
+    public function transaksi(){
+        return $this->hasMany(Transaksi::class,'users_id');
+    }
 }
