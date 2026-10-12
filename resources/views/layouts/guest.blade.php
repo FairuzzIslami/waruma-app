@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
@@ -13,25 +13,32 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet"
-    >
+        rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased bg-white text-gray-900 min-h-screen flex flex-col">
+<body class="font-sans antialiased bg-white text-gray-900 min-h-screen flex flex-col" style="zoom: 90%;">
 
-    {{-- Navbar Pembeli / Guest --}}
-    {{-- @include('partials.navbar-guest') --}}
+    {{-- navbar --}}
+    @unless (request()->routeIs('login'))
+        @include('partials.navbar-guest')
+    @endunless
 
-    {{-- Konten Utama Landing Page --}}
+
     <main class="flex-1">
         {{ $slot }}
     </main>
 
     {{-- Footer --}}
-    {{-- @include('partials.footer') --}}
+    @unless (request()->routeIs('login'))
+        @include('partials.footer')
+    @endunless
+
+    {{-- Floating Buttons WA & Scroll Top --}}
+    @unless (request()->routeIs('login'))
+        @include('partials.floating-buttons')
+    @endunless
 
 </body>
-
 </html>
