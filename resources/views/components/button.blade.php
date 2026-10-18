@@ -1,5 +1,5 @@
 @props([
-    'variant' => 'primary', // 'primary', 'secondary', 'danger'
+    'variant' => 'primary', // 'primary', 'secondary', 'danger', 'dark'
     'size'    => 'md',      // 'sm', 'md', 'lg'
     'type'    => 'button',
     'tag'     => 'button',  // 'button' atau 'a'
@@ -11,6 +11,7 @@
         'primary'   => 'bg-primary hover:bg-yellow-400 text-secondary border-secondary shadow-[3px_3px_0px_0px_var(--tw-shadow-color)] shadow-secondary',
         'secondary' => 'bg-white hover:bg-neutral-custom text-secondary border-secondary shadow-[3px_3px_0px_0px_var(--tw-shadow-color)] shadow-secondary',
         'danger'    => 'bg-red-500 hover:bg-red-600 text-white border-secondary shadow-[3px_3px_0px_0px_rgba(239,68,68,1)]',
+        'dark'      => 'bg-secondary hover:bg-slate-800 text-white border-secondary shadow-[3px_3px_0px_0px_rgba(255,255,255,0.4)]',
     ][$variant] ?? 'bg-primary hover:bg-yellow-400 text-secondary border-secondary shadow-[3px_3px_0px_0px_var(--tw-shadow-color)] shadow-secondary';
 
     // Ukuran tombol

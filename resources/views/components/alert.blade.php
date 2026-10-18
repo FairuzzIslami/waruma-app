@@ -1,5 +1,5 @@
 @props([
-    'type' => 'error', 
+    'type' => 'error',
     'title' => 'Terjadi Kesalahan!',
     'message' => ''
 ])

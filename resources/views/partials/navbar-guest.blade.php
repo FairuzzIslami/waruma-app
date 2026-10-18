@@ -10,14 +10,17 @@
 
             {{-- Desktop Navigation Menu --}}
             <div class="hidden md:flex items-center gap-8 font-headline font-bold text-sm text-secondary">
-                {{-- Efek underline tipis beranimasi (relative group + underline span) --}}
                 <a href="#beranda" class="relative group py-1 text-secondary hover:text-amber-600 transition-colors duration-200">
                     <span>Beranda</span>
                     <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
                 </a>
-
                 <a href="#tentang" class="relative group py-1 text-secondary hover:text-amber-600 transition-colors duration-200">
                     <span>Tentang</span>
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+
+                <a href="#produk" class="relative group py-1 text-secondary hover:text-amber-600 transition-colors duration-200">
+                    <span>Produk</span>
                     <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
                 </a>
 
@@ -25,16 +28,9 @@
                     <span>Kontak</span>
                     <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
                 </a>
-
-                <a href="#faq" class="relative group py-1 text-secondary hover:text-amber-600 transition-colors duration-200">
-                    <span>FAQ</span>
-                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-amber-600 transition-all duration-300 group-hover:w-full"></span>
-                </a>
             </div>
 
-            {{-- Right Action --}}
             <div class="flex items-center gap-3">
-                {{-- Tombol Login dengan efek tekan (active:scale-95) & bayangan bergeser --}}
                 <a href="/login"
                     class="hidden sm:inline-flex items-center justify-center bg-primary text-secondary font-headline font-bold text-xs sm:text-sm px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl border-2 border-secondary shadow-[3px_3px_0px_0px_rgba(35,35,35,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_rgba(35,35,35,1)] active:scale-95 transition-all duration-150">
                     Login Admin
@@ -56,12 +52,12 @@
         </div>
     </div>
 
-    {{-- Mobile Dropdown dengan animasi slide halus --}}
+    {{-- Mobile Dropdown --}}
     <div id="mobile-menu" class="hidden md:hidden border-t-2 border-secondary bg-neutral-custom px-4 pt-3 pb-6 space-y-3 transition-all duration-300 ease-in-out">
         <a href="#beranda" class="mobile-link block font-headline font-bold text-base text-secondary py-2 border-b border-slate-200 hover:text-amber-600 hover:translate-x-1 transition-all duration-200">Beranda</a>
         <a href="#tentang" class="mobile-link block font-headline font-bold text-base text-secondary py-2 border-b border-slate-200 hover:text-amber-600 hover:translate-x-1 transition-all duration-200">Tentang</a>
+        <a href="#produk" class="mobile-link block font-headline font-bold text-base text-secondary py-2 border-b border-slate-200 hover:text-amber-600 hover:translate-x-1 transition-all duration-200">Produk</a>
         <a href="#kontak" class="mobile-link block font-headline font-bold text-base text-secondary py-2 border-b border-slate-200 hover:text-amber-600 hover:translate-x-1 transition-all duration-200">Kontak</a>
-        <a href="#faq" class="mobile-link block font-headline font-bold text-base text-secondary py-2 border-b border-slate-200 hover:text-amber-600 hover:translate-x-1 transition-all duration-200">FAQ</a>
         <div class="pt-2 sm:hidden">
             <a href="/login" class="w-full inline-flex items-center justify-center bg-primary text-secondary font-headline font-bold text-sm py-2.5 rounded-xl border-2 border-secondary shadow-[3px_3px_0px_0px_rgba(35,35,35,1)] active:scale-95 transition-all">
                 Login Admin

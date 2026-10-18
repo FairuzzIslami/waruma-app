@@ -4,7 +4,6 @@
         {{-- Top Grid Section --}}
         <div class="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 pb-10">
 
-            {{-- Brand Info --}}
             <div class="md:col-span-5 space-y-4">
                 <a href="/" class="inline-block">
                     <img src="{{ asset('assets/images/logoWaruma.svg') }}" alt="Logo WaruMa" class="h-9 sm:h-10 w-auto">
@@ -21,7 +20,6 @@
                 </div>
             </div>
 
-            {{-- Jam Operasional --}}
             <div class="md:col-span-3 space-y-3">
                 <h4
                     class="text-xs sm:text-sm font-headline font-extrabold text-secondary uppercase tracking-wider pb-2 border-b-2 border-secondary">
@@ -33,7 +31,6 @@
                 </ul>
             </div>
 
-            {{-- Kontak & Alamat --}}
             <div class="md:col-span-4 space-y-3">
                 <h4
                     class="text-xs sm:text-sm font-headline font-extrabold text-secondary uppercase tracking-wider pb-2 border-b-2 border-secondary">
@@ -47,7 +44,6 @@
             </div>
         </div>
 
-        {{-- Bottom Copyright Section --}}
         <div
             class="border-t border-slate-300 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-body text-slate-600">
             <p class="text-center sm:text-left">

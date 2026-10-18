@@ -407,7 +407,7 @@
 
                         <div class="w-full h-44 flex items-center justify-center p-2">
                             <div class="w-full h-full border-2 border-secondary rounded-xl bg-white flex items-center justify-center p-0.5 shadow-[2px_2px_0px_0px_rgba(35,35,35,1)] overflow-hidden">
-                                <img src="{{ asset('assets/images/bawangMerah.jpeg') }}" alt="Bawang Merah Segar" loading="lazy" class="w-full h-full object-cover rounded-lg">
+                                <img src="{{ asset('assets/images/bawang merah.jpe') }}" alt="Bawang Merah Segar" loading="lazy" class="w-full h-full object-cover rounded-lg">
                             </div>
                         </div>
                     </div>
@@ -541,6 +541,46 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </section>
+
+    {{-- SECTION: CALL TO ACTION (CTA) --}}
+    <section class="bg-neutral-custom py-12 sm:py-16 border-b-2 border-secondary">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-primary border-2 border-secondary rounded-3xl p-6 sm:p-10 lg:p-12 shadow-[8px_8px_0px_0px_rgba(35,35,35,1)] relative overflow-hidden">
+                <div class="max-w-3xl space-y-5 sm:space-y-6">
+                    <div>
+                        <span class="inline-block bg-white text-secondary text-[10px] sm:text-xs font-headline font-bold uppercase tracking-wider px-3 py-1 rounded-full border-2 border-secondary shadow-[2px_2px_0px_0px_rgba(35,35,35,1)]">
+                            BEBAS RIBET • SELALU UPDATE
+                        </span>
+                    </div>
+
+                    {{-- HEADING & DESKRIPSI --}}
+                    <div class="space-y-2 sm:space-y-3">
+                        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-headline text-secondary leading-tight">
+                            Temukan Kebutuhanmu Sekarang di Waruma!
+                        </h2>
+                        <p class="text-xs sm:text-sm lg:text-base font-body text-slate-800 font-medium">
+                            Jelajahi harga sembako terbaru hari ini dan pastikan stok tersedia sebelum keluar rumah.
+                        </p>
+                    </div>
+
+                    {{-- TOMBOL CTA --}}
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-2">
+                        <x-button tag="a" href="#produk" variant="dark" size="lg" class="w-full sm:w-auto inline-flex items-center justify-center gap-2">
+                            <span>Cek Stok Produk Sekarang</span>
+                            <span class="font-extrabold">&rarr;</span>
+                        </x-button>
+
+                        {{-- Tombol Hubungi Pengelola (Menggunakan img icon) --}}
+                        <a href="https://wa.me/6281234567890" target="_blank"
+                        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-secondary font-headline font-bold text-sm px-6 py-3.5 rounded-xl border-2 border-secondary shadow-[3px_3px_0px_0px_rgba(35,35,35,1)] hover:bg-slate-100 transition-all">
+                            <img src="{{ asset('assets/icons/telepon.svg') }}" alt="Telepon Icon" class="w-4 h-4 object-contain">
+                            <span>Hubungi Pengelola</span>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
