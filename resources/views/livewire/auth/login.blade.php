@@ -1,7 +1,7 @@
 <div class="min-h-screen bg-neutral-custom font-body flex items-center justify-center p-4 sm:p-6 lg:p-8">
     <div class="w-full max-w-5xl bg-white border-2 border-secondary rounded-3xl shadow-[4px_4px_0px_0px_rgba(35,35,35,1)] overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[600px]">
 
-        {{-- section kiri --}}
+        {{-- Section Kiri --}}
         <div class="hidden lg:flex lg:col-span-5 bg-primary p-8 lg:p-12 flex-col justify-between relative overflow-hidden border-b-2 lg:border-b-0 lg:border-r-2 border-secondary">
             <div class="absolute -top-12 -right-12 w-48 h-48 bg-yellow-400/50 rounded-full pointer-events-none"></div>
 
@@ -38,7 +38,7 @@
             </div>
         </div>
 
-        {{-- section kanan --}}
+        {{-- Section Kanan --}}
         <div class="lg:col-span-7 bg-neutral-custom p-8 lg:p-12 flex flex-col justify-center">
             <div class="max-w-md w-full mx-auto space-y-6">
 
@@ -50,9 +50,20 @@
                         Khusus admin / pemilik warung.
                     </p>
                 </div>
-                {{-- alert eror auth --}}
+
+                {{-- Alert Berhasil Logout --}}
+                @if (session()->has('success'))
+                    <x-alert type="success" title="Berhasil Logout!" :message="session('success')" />
+                @endif
+
+                {{-- Alert Ditolak / Belum Login --}}
+                @if (session()->has('error'))
+                    <x-alert type="error" title="Akses Ditolak!" :message="session('error')" />
+                @endif
+
+                {{-- Alert Gagal Login (Kredensial Salah) --}}
                 @if (session()->has('auth_error'))
-                    <x-alert type="error" title="Username atau password salah!" :message="session('auth_error')" />
+                    <x-alert type="error" title="Login Gagal!" :message="session('auth_error')" />
                 @endif
 
                 <form wire:submit="login" class="space-y-4">
@@ -112,6 +123,6 @@
                 </x-button>
             </div>
         </div>
-        
+
     </div>
 </div>

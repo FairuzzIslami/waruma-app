@@ -1,39 +1,66 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ $title ?? 'WARUMA - Dashboard Admin' }}</title>
 
-    <title>{{ $title ?? 'WaruMa - Owner' }}</title>
-
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet"
-    >
-
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
+<body class="bg-[#f9f8f0] text-secondary font-headline antialiased min-h-screen flex flex-col">
 
-<body class="font-sans antialiased bg-gray-100 min-h-screen flex">
+    {{-- NAVBAR APP --}}
+    @include('partials.navbar-app')
 
-    {{-- Sidebar (Opsional jika nanti membuat partials/sidebar.blade.php) --}}
-    {{-- @include('partials.sidebar') --}}
+    <!-- WRAPPER UTAMA -->
+    <div class="flex flex-1 relative min-h-[calc(100vh-57px)]">
 
-    <div class="flex-1 flex flex-col min-h-screen">
-        {{-- Navbar Admin/Owner --}}
-        {{-- @include('partials.navbar-owner') --}}
+        {{-- SIDEBAR APP --}}
+        @include('partials.sidebar-app')
 
-        {{-- Konten Utama Dashboard Owner --}}
-        <main class="flex-1 p-6">
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 min-w-0 p-3 sm:p-5 md:p-6 space-y-5 sm:space-y-6">
             {{ $slot }}
         </main>
     </div>
 
-</body>
+    @livewireScripts
+    <!-- JS TOGGLE SIDEBAR CONTROLLER -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sb = document.getElementById('sidebar'),
+                  bd = document.getElementById('backdrop'),
+                  texts = document.querySelectorAll('.sb-text'),
+                  openBtn = document.getElementById('openBtn'),
+                  closeBtn = document.getElementById('closeBtn');
 
+            let isMin = false;
+
+            const toggleMobile = (show) => {
+                if (sb) sb.classList.toggle('-translate-x-full', !show);
+                if (bd) bd.classList.toggle('hidden', !show);
+            };
+
+            if (openBtn) {
+                openBtn.onclick = () => {
+                    if (window.innerWidth < 768) {
+                        toggleMobile(true);
+                    } else if (sb) {
+                        isMin = !isMin;
+                        sb.classList.toggle('w-60', !isMin);
+                        sb.classList.toggle('w-16', isMin);
+                        texts.forEach(t => t.classList.toggle('hidden', isMin));
+                    }
+                };
+            }
+
+            if (closeBtn) closeBtn.onclick = () => toggleMobile(false);
+            if (bd) bd.onclick = () => toggleMobile(false);
+        });
+    </script>
+</body>
 </html>

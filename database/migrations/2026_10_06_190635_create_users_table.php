@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('username',50)->unique();
             $table->string('password',255);
+            $table->string('foto', 255)->nullable();
             $table->timestamps();
         });
     }

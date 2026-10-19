@@ -11,7 +11,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // Jika user belum login dan mencoba akses route yang dilindungi (middleware auth)
+        $middleware->redirectGuestsTo(function () {
+            session()->flash('error', 'Kamu harus login terlebih dahulu untuk mengakses Dashboard.');
+            return route('login');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
