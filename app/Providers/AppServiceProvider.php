@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Carbon\Carbon;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,5 +22,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Blade::anonymousComponentPath(resource_path('views/layouts'));
+        Carbon::setLocale('id');
+        setlocale(LC_TIME, 'id_ID.utf8', 'id_ID', 'id');
     }
 }

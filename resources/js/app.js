@@ -41,3 +41,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Global Shortcut Ctrl + K untuk Focus ke Field Pencarian
+document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+
+        // Cari elemen input yang memiliki atribut data-search-input atau ID inputCari
+        const searchInput = document.querySelector('[data-search-input]') || document.getElementById('inputCari');
+
+        if (searchInput) {
+            searchInput.focus();
+            if (typeof searchInput.select === 'function') {
+                searchInput.select();
+            }
+        }
+    }
+});

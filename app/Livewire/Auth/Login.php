@@ -39,4 +39,10 @@ class Login extends Component
     {
         return view('livewire.auth.login');
     }
+    public function mount()
+    {
+        if (Auth::check()) {
+            return $this->redirect('/dashboard', navigate: true);
+        }
+    }
 }
