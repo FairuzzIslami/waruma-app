@@ -151,13 +151,21 @@
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 @forelse($barangs as $barang)
                     @if($barang->stok > 0)
-                    <!-- BARANG READY -->
+                    <!-- BARANG READY / MENIPIS -->
                     <div wire:click="tambahKeKeranjang({{ $barang->id }})"
                         class="item-produk kartu overflow-hidden cursor-pointer hover:border-kuning transition flex flex-col justify-between group active:scale-95">
                         <div>
                             <div class="relative bg-amber-50 p-2 border-b-2 border-hitam flex justify-between items-center">
                                 <span class="bg-white border-[1.5px] border-hitam rounded px-1.5 py-0.5 text-[9px] font-extrabold">{{ $barang->kode_barang }}</span>
-                                <span class="bg-hijau-muda border-[1.5px] border-hijau text-hijau text-[9px] font-black px-2 py-0.5 rounded-full">{{ $barang->stok }} {{ $barang->satuan->nama_satuan ?? 'pcs' }}</span>
+                                @if($barang->stok <= $barang->min_stok)
+                                    <span class="border-[1.5px] border-amber-700 bg-amber-100 text-amber-800 text-[9px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap inline-block">
+                                        {{ $barang->stok }} {{ $barang->satuan->nama_satuan ?? 'pcs' }}
+                                    </span>
+                                @else
+                                    <span class="border-[1.5px] border-green-700 bg-green-100 text-green-700 text-[9px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap inline-block">
+                                        {{ $barang->stok }} {{ $barang->satuan->nama_satuan ?? 'pcs' }}
+                                    </span>
+                                @endif
                             </div>
                             <div class="p-2.5 text-center">
                                 <img src="{{ $barang->foto ? asset('storage/'.$barang->foto) : asset('assets/barang/beras.jpe') }}" alt="{{ $barang->nama_barang }}" class="w-20 h-20 mx-auto object-contain mb-2 group-hover:scale-105 transition-transform" />
@@ -171,12 +179,12 @@
                         </div>
                     </div>
                     @else
-                    <!-- BARANG HABIS -->
+                    <!-- BARANG HABIS (MERAH) -->
                     <div class="kartu overflow-hidden bg-gray-100 opacity-80 cursor-not-allowed flex flex-col justify-between">
                         <div>
                             <div class="relative bg-gray-200 p-2 border-b-2 border-hitam flex justify-between items-center">
                                 <span class="bg-white border-[1.5px] border-hitam rounded px-1.5 py-0.5 text-[9px] font-extrabold">{{ $barang->kode_barang }}</span>
-                                <span class="bg-merah text-white text-[9px] font-black px-2 py-0.5 rounded-full">Habis</span>
+                                <span class="border-[1.5px] border-red-700 bg-red-100 text-red-700 text-[9px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap inline-block">Habis</span>
                             </div>
                             <div class="p-2.5 text-center">
                                 <img src="{{ $barang->foto ? asset('storage/'.$barang->foto) : asset('assets/barang/telur.jpe') }}" alt="{{ $barang->nama_barang }}" class="w-20 h-20 mx-auto object-contain grayscale mb-2" />
@@ -299,14 +307,14 @@
                         <span wire:click="setUangPas" class="text-amber-800 cursor-pointer hover:underline">Uang Pas (Rp {{ number_format($this->totalHarga, 0, ',', '.') }})</span>
                     </div>
 
-                    <!-- INPUT Uang Tunai -->
+                    <!-- INPUT Uang Tunai (PLACEHOLDER TEXT) -->
                     <div class="border-2 border-hitam rounded-xl p-2 bg-white flex items-center">
                         <span class="font-black text-sm mr-1 text-gray-400">Rp</span>
                         <input type="text"
                                x-data="{ value: @entangle('bayar').live }"
                                x-init="$watch('value', val => value = val ? String(val).replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '')"
                                x-model="value"
-                               placeholder="0"
+                               placeholder="Masukkan nominal bayar..."
                                class="w-full font-black text-lg outline-none bg-transparent text-hitam placeholder-gray-300" />
                     </div>
 
