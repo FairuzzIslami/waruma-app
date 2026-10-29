@@ -17,10 +17,8 @@
             </button>
         </header>
 
-        <!-- FLASH MESSAGE NOTIFIKASI -->
-        @if (session()->has('message'))
-            <x-alert type="success" :message="session('message')" />
-        @endif
+        <!-- KOMPONEN ALERT SELALU READY MENANGKAP EVENT NOTIFIKASI -->
+        <x-alert type="success" :timeout="4000" />
 
         <!-- KARTU STATISTIK -->
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
@@ -78,10 +76,10 @@
         <!-- PENCARIAN & FILTER -->
         <section class="kartu p-3.5 space-y-3.5 bg-white border-2 border-secondary rounded-2xl shadow-[4px_4px_0px_#232323]">
             <div class="flex flex-col sm:flex-row gap-2.5">
-                <label class="flex-1 flex items-center gap-2 border-2 border-secondary rounded-xl px-3 bg-white cursor-text">
-                    <img src="{{ asset('assets/icons/search.svg') }}" alt="Cari" class="w-4 h-4 object-contain" />
-                    <input type="text" id="inputCari" wire:model.live.debounce.300ms="search" placeholder="Cari berdasarkan nama atau kode barang (mis. BRG-001)..." class="w-full py-2.5 text-xs bg-transparent border-none outline-none font-semibold text-secondary placeholder-gray-400" />
-                    <kbd class="hidden md:inline-block px-1.5 py-0.5 text-[10px] font-bold text-gray-500 bg-gray-100 border border-gray-300 rounded shrink-0">Ctrl + K</kbd>
+                <label class="relative flex-1 flex items-center gap-2 border-2 border-secondary rounded-xl px-3 bg-white cursor-text">
+                    <img src="{{ asset('assets/icons/search.svg') }}" alt="Cari" class="w-4 h-4 object-contain shrink-0" />
+                    <input type="text" id="inputCari" wire:model.live.debounce.300ms="search" placeholder="Cari berdasarkan nama atau kode barang (mis. BRG-001)..." class="w-full py-2.5 pr-16 text-xs bg-transparent border-none outline-none font-semibold text-secondary placeholder-gray-400" />
+                    <kbd class="hidden md:inline-flex items-center gap-0.5 absolute right-2.5 px-2 py-0.5 text-[10px] font-mono font-bold text-gray-500 bg-gray-100 border border-gray-300 rounded-md shadow-sm pointer-events-none">Ctrl + K</kbd>
                 </label>
 
                 <div class="relative flex items-center bg-white border-2 border-secondary rounded-xl px-3 shrink-0 shadow-[2px_2px_0px_#232323]">

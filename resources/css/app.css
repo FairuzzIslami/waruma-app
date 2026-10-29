@@ -2,7 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "tailwindcss";
+@layer utilities {
+  /* Mapping Warna Custom WaruMa dari HTML */
+  .border-hitam { border-color: #1a1a1a; }
+  .bg-hitam { background-color: #1a1a1a; }
+  .text-hitam { color: #1a1a1a; }
+
+  .bg-kuning { background-color: #f5b50a; }
+  .bg-kuning-muda { background-color: #fff6dc; }
+  .text-cokelat { color: #7a5a00; }
+
+  .bg-abu { background-color: #f1f1f1; }
+
+  .bg-hijau-muda { background-color: #e3f5e8; }
+  .border-hijau { border-color: #1f7a3d; }
+  .text-hijau { color: #1f7a3d; }
+
+  .bg-merah { background-color: #dc2626; }
+  .bg-merah-muda { background-color: #fee2e2; }
+  .text-merah { color: #dc2626; }
+}
 
 /* Custom Neobrutalism Style WaruMa */
 @layer components {
@@ -10,14 +29,28 @@
     transition: width 0.25s ease, transform 0.25s ease;
   }
 
+  .kartu {
+    background-color: #ffffff;
+    border: 2px solid #1a1a1a;
+    border-radius: 16px;
+    box-shadow: 4px 4px 0px #1a1a1a;
+  }
+
+  .neo-box {
+    background-color: #ffffff;
+    border: 3px solid #1a1a1a;
+    border-radius: 16px;
+    box-shadow: 6px 6px 0px #1a1a1a;
+  }
+
   .neo {
-    border: 2px solid #1b1b1b;
-    box-shadow: 4px 4px 0 #1b1b1b;
+    border: 2px solid #1a1a1a;
+    box-shadow: 4px 4px 0 #1a1a1a;
   }
 
   .neo-sm {
-    border: 2px solid #1b1b1b;
-    box-shadow: 2px 2px 0 #1b1b1b;
+    border: 2px solid #1a1a1a;
+    box-shadow: 2px 2px 0 #1a1a1a;
   }
 
   .neo-danger {
@@ -26,8 +59,8 @@
   }
 
   .btn-brutal {
-    border: 2px solid #1b1b1b;
-    box-shadow: 2px 2px 0px #1b1b1b;
+    border: 2px solid #1a1a1a;
+    box-shadow: 2px 2px 0px #1a1a1a;
     transition: all 0.1s ease;
   }
 
@@ -37,7 +70,15 @@
 
   .btn-brutal:active {
     transform: translate(1px, 1px);
-    box-shadow: 0px 0px 0px #1b1b1b;
+    box-shadow: 0px 0px 0px #1a1a1a;
+  }
+
+  .chip-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  .chip-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 
   .label {
@@ -48,7 +89,7 @@
   }
 
   .foot {
-    border-top: 2px solid #1b1b1b;
+    border-top: 2px solid #1a1a1a;
     padding: 8px 16px;
     font-size: 11px;
     font-weight: 700;
@@ -56,7 +97,7 @@
 
   .field {
     width: 100%;
-    border: 2px solid #1b1b1b;
+    border: 2px solid #1a1a1a;
     border-radius: 8px;
     padding: 8px 12px;
     font-size: 13px;
@@ -66,7 +107,15 @@
 
   .field:focus {
     outline: none;
-    border-color: #1b1b1b;
+    border-color: #1a1a1a;
     box-shadow: 0 0 0 2px #ebba40;
   }
+}
+
+@keyframes modalPop {
+  0% { opacity: 0; transform: scale(0.92) translateY(8px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.animate-pop {
+  animation: modalPop 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

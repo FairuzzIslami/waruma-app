@@ -110,7 +110,7 @@ class Index extends Component
         $cleanHargaBeli = (int) str_replace('.', '', (string) $this->harga_beli);
         $cleanHargaJual = (int) str_replace('.', '', (string) $this->harga_jual);
 
-        // 2. Rules awal tanpa 'gte:min_stok' agar tidak diputus duluan oleh Laravel
+        // 2. Rules awal
         $rules = [
             'nama_barang' => 'required|string|max:255',
             'kategori_id' => 'required|exists:kategori,id',
@@ -135,13 +135,10 @@ class Index extends Component
             'foto.max'             => 'Ukuran foto maksimal 2MB.',
         ];
 
-        // Validasi input dasar (required/image/numeric)
         $this->validate($rules, $messages);
 
-        // 3. Kumpulkan semua validasi custom ke dalam variabel penanda error
         $hasCustomError = false;
 
-        // Validasi Angka Nol
         if ($cleanHargaBeli <= 0) {
             $this->addError('harga_beli', 'Harga beli harus lebih besar dari 0.');
             $hasCustomError = true;
@@ -152,19 +149,16 @@ class Index extends Component
             $hasCustomError = true;
         }
 
-        // Validasi Logika Bisnis 1: Harga Jual Wajib > Harga Beli
         if ($cleanHargaBeli > 0 && $cleanHargaJual > 0 && $cleanHargaJual <= $cleanHargaBeli) {
             $this->addError('harga_jual', 'Harga jual harus lebih besar dari harga beli (modal)!');
             $hasCustomError = true;
         }
 
-        // Validasi Logika Bisnis 2: Stok Awal Wajib >= Batas Minimum Stok
         if ((int)$this->stok < (int)$this->min_stok) {
             $this->addError('stok', 'Stok tidak boleh lebih kecil dari batas minimum stok!');
             $hasCustomError = true;
         }
 
-        // Jika ada salah satu error custom, hentikan proses simpan
         if ($hasCustomError) {
             return;
         }
@@ -193,9 +187,13 @@ class Index extends Component
             ]
         );
 
+        $msgText = $this->isEditMode ? 'Data barang berhasil diperbarui!' : 'Data barang berhasil disimpan!';
+
         $this->showModalForm = false;
         $this->resetForm();
-        session()->flash('message', 'Data barang berhasil disimpan!');
+
+        // KIRIM NOTIFIKASI VIA EVENT BROWSER
+        $this->dispatch('notif-sukses', message: $msgText);
     }
 
     public function openModalRestock($id)
@@ -223,7 +221,7 @@ class Index extends Component
         $barang->increment('stok', (int) $this->jumlahRestock);
 
         $this->showModalRestock = false;
-        session()->flash('message', 'Stok berhasil ditambahkan!');
+        $this->dispatch('notif-sukses', message: 'Stok berhasil ditambahkan!');
     }
 
     public function confirmDeleteSingle($id)
@@ -250,7 +248,7 @@ class Index extends Component
 
             $this->selectedBarang = [];
             $this->selectAll = false;
-            session()->flash('message', 'Data barang berhasil dihapus!');
+            $this->dispatch('notif-sukses', message: 'Data barang berhasil dihapus!');
         }
 
         $this->showModalDelete = false;
