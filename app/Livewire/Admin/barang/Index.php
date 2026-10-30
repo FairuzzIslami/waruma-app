@@ -232,6 +232,10 @@ class Index extends Component
 
     public function confirmDeleteBatch()
     {
+        if (count($this->selectedBarang) === 0) {
+            $this->dispatch('notif-error', message: 'Pilih minimal satu barang yang ingin dihapus!');
+            return;
+        }
         $this->showModalDelete = true;
     }
 

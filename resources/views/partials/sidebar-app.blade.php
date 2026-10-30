@@ -47,7 +47,7 @@
             </a>
 
             {{-- 4. Laporan Keuangan --}}
-            <a href="{{ Route::has('laporan.laba-rugi') ? route('laporan.laba-rugi') : '#' }}"
+            <a href="{{ Route::has('laporan.laba.rugi') ? route('laporan.laba.rugi') : '#' }}"
                class="nav-link flex items-center gap-2.5 px-3 py-2.5 {{ request()->routeIs('laporan.*') ? 'bg-primary font-black border-2 border-secondary shadow-[2px_2px_0px_0px_rgba(35,35,35,1)]' : 'font-bold text-gray-700 hover:bg-amber-50' }} rounded-xl text-xs font-headline transition-all">
                 <img src="{{ asset('assets/icons/grafikNaikPenelusuran.svg') }}" alt="Laporan Keuangan" class="w-4 h-4 object-contain shrink-0">
                 <span class="sb-text whitespace-nowrap">Laporan Untung / Rugi</span>

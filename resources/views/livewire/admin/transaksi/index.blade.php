@@ -314,7 +314,7 @@
                                x-data="{ value: @entangle('bayar').live }"
                                x-init="$watch('value', val => value = val ? String(val).replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '')"
                                x-model="value"
-                               placeholder="Masukkan nominal bayar..."
+                               placeholder="0"
                                class="w-full font-black text-lg outline-none bg-transparent text-hitam placeholder-gray-300" />
                     </div>
 

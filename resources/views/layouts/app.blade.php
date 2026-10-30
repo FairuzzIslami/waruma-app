@@ -11,7 +11,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="bg-[#f9f8f0] text-secondary font-headline antialiased min-h-screen flex flex-col">
+<body x-data="{ openLogoutModal: false }" class="bg-[#f9f8f0] text-secondary font-headline antialiased min-h-screen flex flex-col">
 
     {{-- NAVBAR APP --}}
     @include('partials.navbar-app')
@@ -27,6 +27,9 @@
             {{ $slot }}
         </main>
     </div>
+
+    <!-- TARUH MODAL LOGOUT DI PALING BAWAH LAYOUT UTAMA (DI LUAR CONTAINER FLEX) -->
+    <x-modal-logout />
 
     @livewireScripts
     <!-- JS TOGGLE SIDEBAR CONTROLLER -->

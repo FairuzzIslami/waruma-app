@@ -200,7 +200,7 @@
     </div>
 
     <!-- KOMPONEN MODAL -->
-    <x-modal-barang :kategoris="$kategoris" :satuans="$satuans" />
+    @include('livewire.admin.barang.modal-barang')
+    @include('livewire.admin.barang.modal-delete')
     <x-modal-restock />
-    <x-modal-delete />
 </div>
