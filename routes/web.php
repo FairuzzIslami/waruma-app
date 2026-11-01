@@ -9,12 +9,15 @@ use App\Livewire\Admin\Transaksi\Index as TransaksiIndex;
 use App\Livewire\Admin\LaporanLaba\Index as LaporanLabaIndex;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Auth\Login;
+use App\Livewire\KatalogPublik;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('home.welcome');
 });
+
+Route::get('/katalog', KatalogPublik::class)->name('katalog.publik');
 
 Route::get('/login', Login::class)->name('login');
 Route::post('/logout', function (Request $request) {

@@ -58,12 +58,12 @@
     <!-- FOOTER SIDEBAR -->
     <div class="space-y-2 pt-3 border-t border-gray-100">
         {{-- Katalog Publik Link --}}
-        <a href="{{ url('/') }}" target="_blank"
+        <a href="{{ route('katalog.publik') }}" target="_blank"
            class="flex items-center justify-between px-2.5 py-2 bg-amber-50/60 hover:bg-amber-100 rounded-xl font-extrabold border-2 border-secondary shadow-[2px_2px_0px_0px_rgba(35,35,35,1)] text-xs font-headline transition-all"
            title="Lihat Toko Publik">
             <div class="flex items-center gap-2 overflow-hidden">
                 <img src="{{ asset('assets/icons/toko.svg') }}" alt="Katalog" class="w-4 h-4 object-contain shrink-0">
-                <span class="sb-text whitespace-nowrap text-secondary">Lihat Toko Publik</span>
+                <span class="sb-text whitespace-nowrap text-secondary">Lihat Katalog Produk</span>
             </div>
             <img src="{{ asset('assets/icons/external.svg') }}" alt="Link Luar" class="sb-text w-3.5 h-3.5 object-contain shrink-0">
         </a>

@@ -3,9 +3,6 @@
   <!-- MAIN CONTAINER DASHBOARD KASIR -->
   <main class="flex-1 min-w-0 p-3 sm:p-5 md:p-6 space-y-4 sm:space-y-5">
 
-    <!-- ALERT SUCCESS NOTIFIKASI -->
-    <x-alert />
-
     <!-- HERO BANNER / HEADER DASHBOARD -->
     <section class="kartu p-5 sm:p-8 bg-primary">
       <div class="flex flex-wrap gap-2 mb-3 sm:mb-4">
@@ -121,6 +118,8 @@
     <!-- PERINGATAN RESTOCK (HANYA STOK MENIPIS) -->
     @if($barangKritis->count() > 0)
       <section class="kartu p-4 sm:p-5 bg-amber-50 space-y-3">
+        <!-- ALERT SUCCESS NOTIFIKASI -->
+        <x-alert />
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div class="flex items-center gap-3">
             <span class="p-2 bg-primary border-2 border-secondary rounded-xl shadow-[2px_2px_0px_#232323] shrink-0">

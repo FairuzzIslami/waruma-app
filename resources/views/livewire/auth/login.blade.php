@@ -118,7 +118,7 @@
                     <div class="flex-grow border-t border-gray-300"></div>
                 </div>
 
-                <x-button tag="a" href="/" wire:navigate variant="secondary" size="lg" class="w-full text-sm">
+                <x-button tag="a" href="{{ route('katalog.publik') }}" wire:navigate variant="secondary" size="lg" class="w-full text-sm">
                     <span>Lihat info & stok tanpa login</span>
                 </x-button>
             </div>

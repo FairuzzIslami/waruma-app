@@ -8,10 +8,14 @@ use App\Models\Transaksi;
 use App\Models\DetailTransaksi;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
+#[Layout('layouts.app')]
+#[Title('WARUMA - Kasir & Transaksi POS')]
 class Index extends Component
 {
     use WithPagination;
@@ -20,10 +24,10 @@ class Index extends Component
 
     public $search = '';
     public $kategoriAktif = 'semua';
-    public $keranjang = []; // State keranjang transaksi
+    public $keranjang = [];
 
     public $bayar = null;
-    public $transaksiSelesai = null; // Data transaksi untuk nota/modal
+    public $transaksiSelesai = null;
 
     public function mount()
     {
@@ -233,6 +237,6 @@ class Index extends Component
         return view('livewire.admin.transaksi.index', [
             'barangs'   => $this->getBarangQuery()->paginate(9),
             'kategoris' => Kategori::all(),
-        ])->layout('layouts.app', ['title' => 'WARUMA - Kasir & Transaksi POS']);
+        ]);
     }
 }

@@ -20,8 +20,8 @@
 
 <body class="font-sans antialiased bg-white text-gray-900 min-h-screen flex flex-col" style="zoom: 90%;">
 
-    {{-- navbar --}}
-    @unless (request()->routeIs('login'))
+    {{-- navbar (Sembunyikan di halaman login dan katalog publik) --}}
+    @unless (request()->routeIs('login') || request()->routeIs('katalog.publik'))
         @include('partials.navbar-guest')
     @endunless
 
@@ -30,13 +30,13 @@
         {{ $slot }}
     </main>
 
-    {{-- Footer --}}
-    @unless (request()->routeIs('login'))
+    {{-- Footer (Sembunyikan di halaman login dan katalog publik) --}}
+    @unless (request()->routeIs('login') || request()->routeIs('katalog.publik'))
         @include('partials.footer')
     @endunless
 
-    {{-- Floating Buttons WA & Scroll Top --}}
-    @unless (request()->routeIs('login'))
+    {{-- Floating Buttons WA & Scroll Top (Sembunyikan di halaman login dan katalog publik) --}}
+    @unless (request()->routeIs('login') || request()->routeIs('katalog.publik'))
         @include('partials.floating-buttons')
     @endunless
 
