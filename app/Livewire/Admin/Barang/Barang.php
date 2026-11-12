@@ -7,14 +7,14 @@ use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
-use App\Models\Barang;
+use App\Models\Barang as BarangModel;
 use App\Models\Kategori;
 use App\Models\Satuan;
 use Illuminate\Support\Facades\Storage;
 
 #[Layout('layouts.app')]
 #[Title('WARUMA - Kelola Stok & Inventaris')]
-class Index extends Component
+class Barang extends Component
 {
     use WithPagination, WithFileUploads;
 
@@ -68,7 +68,7 @@ class Index extends Component
 
     public function generateKodeBarang()
     {
-        $lastBarang = Barang::orderBy('id', 'desc')->first();
+        $lastBarang = BarangModel::orderBy('id', 'desc')->first();
         if (!$lastBarang) {
             return 'BRG-001';
         }
@@ -88,7 +88,7 @@ class Index extends Component
     {
         $this->resetForm();
         $this->isEditMode = true;
-        $barang = Barang::findOrFail($id);
+        $barang = BarangModel::findOrFail($id);
 
         $this->barangId = $barang->id;
         $this->kode_barang = $barang->kode_barang;
@@ -172,7 +172,7 @@ class Index extends Component
             $fotoPath = $this->foto->store('barang', 'public');
         }
 
-        Barang::updateOrCreate(
+        BarangModel::updateOrCreate(
             ['id' => $this->barangId],
             [
                 'kode_barang' => $this->kode_barang,
@@ -198,7 +198,7 @@ class Index extends Component
 
     public function openModalRestock($id)
     {
-        $barang = Barang::findOrFail($id);
+        $barang = BarangModel::findOrFail($id);
         $this->restockBarangId = $barang->id;
         $this->restockNama = $barang->nama_barang . ' (' . $barang->kode_barang . ')';
         $this->jumlahRestock = null;
@@ -217,7 +217,7 @@ class Index extends Component
             ]
         );
 
-        $barang = Barang::findOrFail($this->restockBarangId);
+        $barang = BarangModel::findOrFail($this->restockBarangId);
         $barang->increment('stok', (int) $this->jumlahRestock);
 
         $this->showModalRestock = false;
@@ -242,7 +242,7 @@ class Index extends Component
     public function deleteSelected()
     {
         if (count($this->selectedBarang) > 0) {
-            $items = Barang::whereIn('id', $this->selectedBarang)->get();
+            $items = BarangModel::whereIn('id', $this->selectedBarang)->get();
             foreach ($items as $item) {
                 if ($item->foto && Storage::disk('public')->exists($item->foto)) {
                     Storage::disk('public')->delete($item->foto);
@@ -266,7 +266,7 @@ class Index extends Component
 
     private function getBarangQuery()
     {
-        return Barang::with(['kategori', 'satuan'])
+        return BarangModel::with(['kategori', 'satuan'])
             ->when($this->search, function ($q) {
                 $q->where(function ($sub) {
                     $sub->where('nama_barang', 'like', '%' . $this->search . '%')
@@ -289,10 +289,10 @@ class Index extends Component
 
     public function render()
     {
-        $statTotal   = Barang::count();
-        $statAman    = Barang::whereColumn('stok', '>', 'min_stok')->count();
-        $statRestock = Barang::whereColumn('stok', '<=', 'min_stok')->count();
-        $statHpp     = Barang::selectRaw('SUM(harga_beli * stok) as total_hpp')->value('total_hpp') ?? 0;
+        $statTotal   = BarangModel::count();
+        $statAman    = BarangModel::whereColumn('stok', '>', 'min_stok')->count();
+        $statRestock = BarangModel::whereColumn('stok', '<=', 'min_stok')->count();
+        $statHpp     = BarangModel::selectRaw('SUM(harga_beli * stok) as total_hpp')->value('total_hpp') ?? 0;
 
         return view('livewire.admin.barang.index', [
             'barangList'  => $this->getBarangQuery()->latest()->paginate(5),

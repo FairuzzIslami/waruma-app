@@ -1,4 +1,4 @@
-<x-guest title="WaruMa">
+<div>
 
     {{-- HERO SECTION --}}
     <section class="bg-neutral-custom border-b-2 border-secondary py-8 sm:py-12 lg:py-16">
@@ -283,156 +283,92 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
 
-                <div class="bg-white border-2 border-secondary rounded-2xl shadow-[6px_6px_0px_0px_rgba(35,35,35,1)] flex flex-col justify-between overflow-hidden">
-                    <div class="bg-white p-4 flex flex-col h-full">
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="bg-white text-secondary text-[10px] font-headline font-bold px-2.5 py-1 rounded-md border border-secondary uppercase">
-                                MIE INSTAN
-                            </span>
-                            <span class="bg-emerald-100 text-emerald-700 text-[10px] font-headline font-bold px-2.5 py-1 rounded-md border border-emerald-400">
-                                Tersedia
-                            </span>
+                @forelse ($produkTerkini as $index => $item)
+                    @php
+                        // Logika status stok berdasarkan stok & min_stok dari Barang.php
+                        $isHabis    = $item->stok <= 0;
+                        $isMenipis  = $item->stok > 0 && $item->stok <= $item->min_stok;
+
+                        // Selang-seling background header kartu (index 0,2 = bg-white; index 1,3 = bg-tertiary)
+                        $cardTopBg  = $index % 2 === 0 ? 'bg-white' : 'bg-tertiary';
+
+                        // Ambil nama kategori & satuan dari relasi
+                        $namaKategori = $item->kategori->nama_kategori ?? $item->kategori->nama ?? 'UMUM';
+                        $namaSatuan   = $item->satuan->nama_satuan ?? $item->satuan->nama ?? 'pcs';
+                    @endphp
+
+                    <div class="bg-white border-2 border-secondary rounded-2xl shadow-[6px_6px_0px_0px_rgba(35,35,35,1)] flex flex-col justify-between overflow-hidden">
+                        <div class="{{ $cardTopBg }} p-4 flex flex-col h-full">
+                            <div class="flex items-center justify-between mb-3 gap-2">
+                                <span class="bg-white text-secondary text-[10px] font-headline font-bold px-2.5 py-1 rounded-md border border-secondary uppercase truncate">
+                                    {{ $namaKategori }}
+                                </span>
+
+                                @if ($isHabis)
+                                    <span class="bg-rose-100 text-rose-700 text-[10px] font-headline font-bold px-2.5 py-1 rounded-md border border-rose-400 flex-shrink-0">
+                                        Stok Habis
+                                    </span>
+                                @elseif ($isMenipis)
+                                    <span class="bg-primary text-secondary text-[10px] font-headline font-bold px-2.5 py-1 rounded-md border border-secondary flex-shrink-0">
+                                        Sisa Sedikit
+                                    </span>
+                                @else
+                                    <span class="bg-emerald-100 text-emerald-700 text-[10px] font-headline font-bold px-2.5 py-1 rounded-md border border-emerald-400 flex-shrink-0">
+                                        Tersedia
+                                    </span>
+                                @endif
+                            </div>
+
+                            <div class="w-full h-44 flex items-center justify-center p-2">
+                                <div class="w-full h-full border-2 border-secondary rounded-xl bg-white flex items-center justify-center p-0.5 shadow-[2px_2px_0px_0px_rgba(35,35,35,1)] overflow-hidden">
+                                    @if ($item->foto)
+                                        <img src="{{ asset('storage/' . $item->foto) }}" alt="{{ $item->nama_barang }}" loading="lazy" class="w-full h-full object-cover rounded-lg">
+                                    @else
+                                        <div class="w-full h-full bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-headline font-bold">
+                                            No Image
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="w-full h-44 flex items-center justify-center p-2">
-                            <div class="w-full h-full border-2 border-secondary rounded-xl bg-white flex items-center justify-center p-0.5 shadow-[2px_2px_0px_0px_rgba(35,35,35,1)] overflow-hidden">
-                                <img src="{{ asset('assets/images/indomieGoreng.jpg') }}" alt="Indomie Goreng Spesial" loading="lazy" class="w-full h-full object-cover rounded-lg">
+                        <div class="border-t-2 border-secondary p-4 bg-white">
+                            <h3 class="font-headline font-bold text-base text-secondary line-clamp-1" title="{{ $item->nama_barang }}">
+                                {{ $item->nama_barang }}
+                            </h3>
+                            <p class="text-xs font-body text-slate-600 mt-1 leading-relaxed line-clamp-2 min-h-[2.5rem]">
+                                {{ $item->deskripsi ?? 'Kode Produk: ' . $item->kode_barang . ' — Kebutuhan harian berkualitas di WaruMa.' }}
+                            </p>
+
+                            <div class="border-t border-slate-200 pt-3 mt-4 flex items-end justify-between">
+                                <div>
+                                    <span class="text-[10px] font-label text-slate-400 uppercase font-bold">HARGA</span>
+                                    <p class="font-headline font-extrabold text-base text-secondary">
+                                        Rp {{ number_format($item->harga_jual, 0, ',', '.') }}
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-[10px] font-label text-slate-400 uppercase font-bold">STOK TOKO</span>
+                                    @if ($isHabis)
+                                        <p class="font-headline font-bold text-xs text-rose-600">0 {{ $namaSatuan }}</p>
+                                    @elseif ($isMenipis)
+                                        <p class="font-headline font-bold text-xs text-amber-700">Sisa {{ $item->stok }} {{ $namaSatuan }}</p>
+                                    @else
+                                        <p class="font-headline font-bold text-xs text-emerald-600">{{ $item->stok }} {{ $namaSatuan }}</p>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="border-t-2 border-secondary p-4 bg-white">
-                        <h3 class="font-headline font-bold text-base text-secondary line-clamp-1">Indomie Goreng Spesial</h3>
-                        <p class="text-xs font-body text-slate-600 mt-1 leading-relaxed line-clamp-2 min-h-[2.5rem]">
-                            Isi 85 gram, mie instan goreng original gurih.
-                        </p>
-
-                        <div class="border-t border-slate-200 pt-3 mt-4 flex items-end justify-between">
-                            <div>
-                                <span class="text-[10px] font-label text-slate-400 uppercase font-bold">HARGA</span>
-                                <p class="font-headline font-extrabold text-base text-secondary">Rp 3.100</p>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-[10px] font-label text-slate-400 uppercase font-bold">STOK TOKO</span>
-                                <p class="font-headline font-bold text-xs text-emerald-600">120 bks</p>
-                            </div>
-                        </div>
+                @empty
+                    <div class="col-span-full bg-white border-2 border-secondary rounded-2xl p-8 text-center shadow-[4px_4px_0px_0px_rgba(35,35,35,1)]">
+                        <p class="font-headline font-bold text-secondary">Belum ada produk yang ditambahkan ke etalase.</p>
                     </div>
-                </div>
-
-                <div class="bg-white border-2 border-secondary rounded-2xl shadow-[6px_6px_0px_0px_rgba(35,35,35,1)] flex flex-col justify-between overflow-hidden">
-                    <div class="bg-tertiary p-4 flex flex-col h-full">
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="bg-white text-secondary text-[10px] font-headline font-bold px-2.5 py-1 rounded-md border border-secondary uppercase">
-                                SEMBAKO
-                            </span>
-                            <span class="bg-emerald-100 text-emerald-700 text-[10px] font-headline font-bold px-2.5 py-1 rounded-md border border-emerald-400">
-                                Tersedia
-                            </span>
-                        </div>
-
-                        <div class="w-full h-44 flex items-center justify-center p-2">
-                            <div class="w-full h-full border-2 border-secondary rounded-xl bg-white flex items-center justify-center p-0.5 shadow-[2px_2px_0px_0px_rgba(35,35,35,1)] overflow-hidden">
-                                <img src="{{ asset('assets/images/beras.jpg') }}" alt="Beras Setra Ramos 5kg" loading="lazy" class="w-full h-full object-cover rounded-lg">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="border-t-2 border-secondary p-4 bg-white">
-                        <h3 class="font-headline font-bold text-base text-secondary line-clamp-1">Beras Setra Ramos 5kg</h3>
-                        <p class="text-xs font-body text-slate-600 mt-1 leading-relaxed line-clamp-2 min-h-[2.5rem]">
-                            Beras kualitas super pulen tanpa pemutih sintetis.
-                        </p>
-
-                        <div class="border-t border-slate-200 pt-3 mt-4 flex items-end justify-between">
-                            <div>
-                                <span class="text-[10px] font-label text-slate-400 uppercase font-bold">HARGA</span>
-                                <p class="font-headline font-extrabold text-base text-secondary">Rp 68.000</p>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-[10px] font-label text-slate-400 uppercase font-bold">STOK TOKO</span>
-                                <p class="font-headline font-bold text-xs text-emerald-600">18 karung</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white border-2 border-secondary rounded-2xl shadow-[6px_6px_0px_0px_rgba(35,35,35,1)] flex flex-col justify-between overflow-hidden">
-                    <div class="bg-white p-4 flex flex-col h-full">
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="bg-white text-secondary text-[10px] font-headline font-bold px-2.5 py-1 rounded-md border border-secondary uppercase">
-                                SEMBAKO
-                            </span>
-                            <span class="bg-emerald-100 text-emerald-700 text-[10px] font-headline font-bold px-2.5 py-1 rounded-md border border-emerald-400">
-                                Tersedia
-                            </span>
-                        </div>
-
-                        <div class="w-full h-44 flex items-center justify-center p-2">
-                            <div class="w-full h-full border-2 border-secondary rounded-xl bg-white flex items-center justify-center p-0.5 shadow-[2px_2px_0px_0px_rgba(35,35,35,1)] overflow-hidden">
-                                <img src="{{ asset('assets/images/minyakGorenng.jpg') }}" alt="Minyak Goreng 2 Liter" loading="lazy" class="w-full h-full object-cover rounded-lg">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="border-t-2 border-secondary p-4 bg-white">
-                        <h3 class="font-headline font-bold text-base text-secondary line-clamp-1">Minyak Goreng 2 Liter</h3>
-                        <p class="text-xs font-body text-slate-600 mt-1 leading-relaxed line-clamp-2 min-h-[2.5rem]">
-                            Kemasan pouch higienis, jernih untuk menggoreng renyah.
-                        </p>
-
-                        <div class="border-t border-slate-200 pt-3 mt-4 flex items-end justify-between">
-                            <div>
-                                <span class="text-[10px] font-label text-slate-400 uppercase font-bold">HARGA</span>
-                                <p class="font-headline font-extrabold text-base text-secondary">Rp 34.500</p>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-[10px] font-label text-slate-400 uppercase font-bold">STOK TOKO</span>
-                                <p class="font-headline font-bold text-xs text-emerald-600">42 pouch</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white border-2 border-secondary rounded-2xl shadow-[6px_6px_0px_0px_rgba(35,35,35,1)] flex flex-col justify-between overflow-hidden">
-                    <div class="bg-tertiary p-4 flex flex-col h-full">
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="bg-white text-secondary text-[10px] font-headline font-bold px-2.5 py-1 rounded-md border border-secondary uppercase">
-                                SEMBAKO
-                            </span>
-                            <span class="bg-primary text-secondary text-[10px] font-headline font-bold px-2.5 py-1 rounded-md border border-secondary">
-                                Sisa Sedikit
-                            </span>
-                        </div>
-
-                        <div class="w-full h-44 flex items-center justify-center p-2">
-                            <div class="w-full h-full border-2 border-secondary rounded-xl bg-white flex items-center justify-center p-0.5 shadow-[2px_2px_0px_0px_rgba(35,35,35,1)] overflow-hidden">
-                                <img src="{{ asset('assets/images/bawang merah.jpe') }}" alt="Bawang Merah Segar" loading="lazy" class="w-full h-full object-cover rounded-lg">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="border-t-2 border-secondary p-4 bg-white">
-                        <h3 class="font-headline font-bold text-base text-secondary line-clamp-1">Bawang Merah Segar</h3>
-                        <p class="text-xs font-body text-slate-600 mt-1 leading-relaxed line-clamp-2 min-h-[2.5rem]">
-                            Bawang merah pilihan segar langsung dari petani.
-                        </p>
-
-                        <div class="border-t border-slate-200 pt-3 mt-4 flex items-end justify-between">
-                            <div>
-                                <span class="text-[10px] font-label text-slate-400 uppercase font-bold">HARGA</span>
-                                <p class="font-headline font-extrabold text-base text-secondary">Rp 28.000</p>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-[10px] font-label text-slate-400 uppercase font-bold">STOK TOKO</span>
-                                <p class="font-headline font-bold text-xs text-amber-700">Sisa 3 kg</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                @endforelse
 
             </div>
 
+            {{-- BANNER CTA KATALOG LENGKAP --}}
             <div class="bg-primary border-2 border-secondary rounded-2xl p-6 sm:p-8 shadow-[8px_8px_0px_0px_rgba(35,35,35,1)] flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                 <div class="space-y-2 max-w-2xl">
                     <span class="inline-block bg-white text-secondary text-[10px] sm:text-xs font-headline font-bold uppercase tracking-wider px-2.5 py-1 rounded border border-secondary">
@@ -442,13 +378,13 @@
                         Cek Semua Barang & Stok
                     </h3>
                     <p class="text-xs sm:text-sm font-body text-slate-900 leading-relaxed">
-                        Buka katalog publik WaruMa untuk melihat seluruh 22+ produk, harga satuan/grosir, dan ketersediaan stok fisik — bebas cek tanpa login.
+                        Buka katalog publik WaruMa untuk melihat seluruh {{ $totalProduk }} produk, harga satuan/grosir, dan ketersediaan stok fisik — bebas cek tanpa login.
                     </p>
                 </div>
 
                 <div class="w-full md:w-auto">
-                    <a href="#katalog" class="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-secondary text-white font-headline font-bold text-xs sm:text-sm px-6 py-3.5 rounded-xl border-2 border-secondary shadow-[3px_3px_0px_0px_rgba(255,255,255,0.3)] hover:bg-slate-800 transition-all">
-                        Buka Katalog Publik Lengkap (22 Produk)
+                    <a href="{{ route('katalog.publik') }}" class="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-secondary text-white font-headline font-bold text-xs sm:text-sm px-6 py-3.5 rounded-xl border-2 border-secondary shadow-[3px_3px_0px_0px_rgba(255,255,255,0.3)] hover:bg-slate-800 transition-all">
+                        Buka Katalog Publik Lengkap ({{ $totalProduk }} Produk)
                     </a>
                 </div>
             </div>
@@ -684,4 +620,4 @@
             </div>
         </div>
     </section>
-</x-guest>
+</div>

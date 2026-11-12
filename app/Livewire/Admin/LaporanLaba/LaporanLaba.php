@@ -15,7 +15,7 @@ use Carbon\Carbon;
 
 #[Layout('layouts.app')]
 #[Title('WARUMA - Laporan Laba Rugi & Finansial')]
-class Index extends Component
+class LaporanLaba extends Component
 {
     use WithPagination;
 

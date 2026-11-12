@@ -4,7 +4,7 @@ namespace App\Livewire\Admin\Transaksi;
 
 use App\Models\Barang;
 use App\Models\Kategori;
-use App\Models\Transaksi;
+use App\Models\Transaksi as TransaksiModel;
 use App\Models\DetailTransaksi;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -16,7 +16,7 @@ use Carbon\Carbon;
 
 #[Layout('layouts.app')]
 #[Title('WARUMA - Kasir & Transaksi POS')]
-class Index extends Component
+class Transaksi extends Component
 {
     use WithPagination;
 
@@ -148,7 +148,7 @@ class Index extends Component
     public function getKodeTransaksiBerikutnyaProperty()
     {
         $todayStr = Carbon::now()->format('Ymd');
-        $countToday = Transaksi::whereDate('tanggal_transaksi', Carbon::today())->count() + 1;
+        $countToday = TransaksiModel::whereDate('tanggal_transaksi', Carbon::today())->count() + 1;
         return 'TRX-' . $todayStr . '-' . str_pad($countToday, 4, '0', STR_PAD_LEFT);
     }
 
@@ -175,7 +175,7 @@ class Index extends Component
         try {
             $kodeTrx = $this->kodeTransaksiBerikutnya;
 
-            $transaksi = Transaksi::create([
+            $transaksi = TransaksiModel::create([
                 'kode_transaksi'    => $kodeTrx,
                 'users_id'          => Auth::id() ?? 1,
                 'total_harga'       => $this->totalHarga,
