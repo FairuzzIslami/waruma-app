@@ -171,100 +171,168 @@
                 </p>
             </div>
 
+            @php
+                $iconMap = [
+                    'Sembako'        => 'sembako.svg',
+                    'Mie Instan'     => 'mieInstan.svg',
+                    'Minuman'        => 'minuman.svg',
+                    'Makanan Ringan' => 'makananRingan.svg',
+                    'Rumah Tangga'   => 'rumahTangga.svg',
+                    'Perawatan Diri' => 'perawatanDiri.svg',
+                    'Bumbu Dapur'    => 'bumbuDapur.svg',
+                ];
+            @endphp
+
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                @foreach ($kategoris as $index => $kategori)
+                    @php
+                        $namaKat = $kategori->nama_kategori ?? $kategori->nama;
+                        $isBumbuDapur = str_contains(strtolower($namaKat), 'bumbu dapur');
+                        $iconFile = $iconMap[$namaKat] ?? ($isBumbuDapur ? 'bumbuDapur.svg' : 'sembako.svg');
 
-                <a href="#produk"
+                        // Selang-seling warna box icon: index genap kuning (bg-primary), ganjil putih (bg-white)
+                        $iconBg = $index % 2 === 0 ? 'bg-primary' : 'bg-white';
+                    @endphp
+
+                    <a href="{{ route('katalog.publik', ['kategori' => $kategori->id]) }}"
                     class="bg-white border-2 border-secondary rounded-2xl p-3.5 flex items-center gap-3.5 shadow-[4px_4px_0px_0px_rgba(35,35,35,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(35,35,35,1)] transition-all group">
-                    <div class="w-10 h-10 bg-primary border-2 border-secondary rounded-xl flex items-center justify-center p-2 flex-shrink-0 shadow-[2px_2px_0px_0px_rgba(35,35,35,1)]">
-                        <img src="{{ asset('assets/icons/sembako.svg') }}" alt="Sembako" loading="lazy" class="w-full h-full object-contain">
-                    </div>
-                    <div>
-                        <h3 class="font-headline font-bold text-sm text-secondary group-hover:text-amber-600 transition-colors">
-                            Sembako
-                        </h3>
-                        <p class="text-[11px] font-body text-slate-500">4 Produk</p>
-                    </div>
-                </a>
 
-                <a href="#produk"
-                    class="bg-white border-2 border-secondary rounded-2xl p-3.5 flex items-center gap-3.5 shadow-[4px_4px_0px_0px_rgba(35,35,35,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(35,35,35,1)] transition-all group">
-                    <div class="w-10 h-10 bg-white border-2 border-secondary rounded-xl flex items-center justify-center p-2 flex-shrink-0 shadow-[2px_2px_0px_0px_rgba(35,35,35,1)]">
-                        <img src="{{ asset('assets/icons/mieInstan.svg') }}" alt="Mie Instan" loading="lazy" class="w-full h-full object-contain">
-                    </div>
-                    <div>
-                        <h3 class="font-headline font-bold text-sm text-secondary group-hover:text-amber-600 transition-colors">
-                            Mie Instan
-                        </h3>
-                        <p class="text-[11px] font-body text-slate-500">4 Produk</p>
-                    </div>
-                </a>
+                        <div class="w-10 h-10 {{ $iconBg }} border-2 border-secondary rounded-xl flex items-center justify-center p-2 flex-shrink-0 shadow-[2px_2px_0px_0px_rgba(35,35,35,1)]">
+                            <img src="{{ asset('assets/icons/' . $iconFile) }}" alt="{{ $namaKat }}" loading="lazy" class="w-full h-full object-contain">
+                        </div>
 
-                <a href="#produk"
-                    class="bg-white border-2 border-secondary rounded-2xl p-3.5 flex items-center gap-3.5 shadow-[4px_4px_0px_0px_rgba(35,35,35,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(35,35,35,1)] transition-all group">
-                    <div class="w-10 h-10 bg-primary border-2 border-secondary rounded-xl flex items-center justify-center p-2 flex-shrink-0 shadow-[2px_2px_0px_0px_rgba(35,35,35,1)]">
-                        <img src="{{ asset('assets/icons/minuman.svg') }}" alt="Minuman" loading="lazy" class="w-full h-full object-contain">
-                    </div>
-                    <div>
-                        <h3 class="font-headline font-bold text-sm text-secondary group-hover:text-amber-600 transition-colors">
-                            Minuman
-                        </h3>
-                        <p class="text-[11px] font-body text-slate-500">4 Produk</p>
-                    </div>
-                </a>
+                        <div>
+                            <h3 class="font-headline font-bold text-sm text-secondary group-hover:text-amber-600 transition-colors">
+                                {{ $namaKat }}
+                            </h3>
+                            <p class="text-[11px] font-body text-slate-500">
+                                {{ $kategori->jumlah_produk }} Produk
+                            </p>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
 
-                <a href="#produk"
-                    class="bg-white border-2 border-secondary rounded-2xl p-3.5 flex items-center gap-3.5 shadow-[4px_4px_0px_0px_rgba(35,35,35,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(35,35,35,1)] transition-all group">
-                    <div class="w-10 h-10 bg-white border-2 border-secondary rounded-xl flex items-center justify-center p-2 flex-shrink-0 shadow-[2px_2px_0px_0px_rgba(35,35,35,1)]">
-                        <img src="{{ asset('assets/icons/makananRingan.svg') }}" alt="Makanan Ringan" loading="lazy" class="w-full h-full object-contain">
-                    </div>
-                    <div>
-                        <h3 class="font-headline font-bold text-sm text-secondary group-hover:text-amber-600 transition-colors">
-                            Makanan Ringan
-                        </h3>
-                        <p class="text-[11px] font-body text-slate-500">3 Produk</p>
-                    </div>
-                </a>
+        </div>
+    </section>
 
-                <a href="#produk"
-                    class="bg-white border-2 border-secondary rounded-2xl p-3.5 flex items-center gap-3.5 shadow-[4px_4px_0px_0px_rgba(35,35,35,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(35,35,35,1)] transition-all group">
-                    <div class="w-10 h-10 bg-primary border-2 border-secondary rounded-xl flex items-center justify-center p-2 flex-shrink-0 shadow-[2px_2px_0px_0px_rgba(35,35,35,1)]">
-                        <img src="{{ asset('assets/icons/rumahTangga.svg') }}" alt="Rumah Tangga" loading="lazy" class="w-full h-full object-contain">
-                    </div>
-                    <div>
-                        <h3 class="font-headline font-bold text-sm text-secondary group-hover:text-amber-600 transition-colors">
-                            Rumah Tangga
-                        </h3>
-                        <p class="text-[11px] font-body text-slate-500">2 Produk</p>
-                    </div>
-                </a>
+    {{-- SECTION: PRODUK & STOK TERKINI --}}
+    <section id="produk" class="bg-neutral-custom py-12 sm:py-16 border-b-2 border-secondary">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-                <a href="#produk"
-                    class="bg-white border-2 border-secondary rounded-2xl p-3.5 flex items-center gap-3.5 shadow-[4px_4px_0px_0px_rgba(35,35,35,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(35,35,35,1)] transition-all group">
-                    <div class="w-10 h-10 bg-white border-2 border-secondary rounded-xl flex items-center justify-center p-2 flex-shrink-0 shadow-[2px_2px_0px_0px_rgba(35,35,35,1)]">
-                        <img src="{{ asset('assets/icons/perawatanDiri.svg') }}" alt="Perawatan Diri" loading="lazy" class="w-full h-full object-contain">
-                    </div>
-                    <div>
-                        <h3 class="font-headline font-bold text-sm text-secondary group-hover:text-amber-600 transition-colors">
-                            Perawatan Diri
-                        </h3>
-                        <p class="text-[11px] font-body text-slate-500">2 Produk</p>
-                    </div>
-                </a>
+            <div class="mb-8">
+                <h2 class="text-2xl sm:text-3xl font-extrabold font-headline text-secondary">
+                    Produk & Stok Terkini
+                </h2>
+                <p class="text-xs sm:text-sm font-body text-slate-600 mt-1">
+                    Update otomatis setiap kali ada transaksi kasir di toko.
+                </p>
+            </div>
 
-                <a href="#produk"
-                    class="sm:col-span-2 bg-white border-2 border-secondary rounded-2xl p-3.5 flex items-center gap-3.5 shadow-[4px_4px_0px_0px_rgba(35,35,35,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(35,35,35,1)] transition-all group">
-                    <div class="w-10 h-10 bg-primary border-2 border-secondary rounded-xl flex items-center justify-center p-2 flex-shrink-0 shadow-[2px_2px_0px_0px_rgba(35,35,35,1)]">
-                        <img src="{{ asset('assets/icons/bumbuDapur.svg') }}" alt="Bumbu Dapur" loading="lazy" class="w-full h-full object-contain">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+
+                @forelse ($produkTerkini as $index => $item)
+                    @php
+                        $isHabis   = $item->stok <= 0;
+                        $isMenipis = $item->stok > 0 && $item->stok <= $item->min_stok;
+                        $cardTopBg = $index % 2 === 0 ? 'bg-white' : 'bg-tertiary';
+
+                        $namaKategori = $item->kategori->nama_kategori ?? $item->kategori->nama ?? 'UMUM';
+                        $namaSatuan   = $item->satuan->nama_satuan ?? $item->satuan->nama ?? 'pcs';
+                    @endphp
+
+                    <div class="bg-white border-2 border-secondary rounded-2xl shadow-[6px_6px_0px_0px_rgba(35,35,35,1)] flex flex-col justify-between overflow-hidden">
+                        <div class="{{ $cardTopBg }} p-4 flex flex-col h-full">
+                            <div class="flex items-center justify-between mb-3 gap-2">
+                                <span class="bg-white text-secondary text-[10px] font-headline font-bold px-2.5 py-1 rounded-md border border-secondary uppercase truncate">
+                                    {{ $namaKategori }}
+                                </span>
+
+                                @if ($isHabis)
+                                    <span class="bg-rose-100 text-rose-700 text-[10px] font-headline font-bold px-2.5 py-1 rounded-md border border-rose-400 flex-shrink-0">
+                                        Stok Habis
+                                    </span>
+                                @elseif ($isMenipis)
+                                    <span class="bg-primary text-secondary text-[10px] font-headline font-bold px-2.5 py-1 rounded-md border border-secondary flex-shrink-0">
+                                        Sisa Sedikit
+                                    </span>
+                                @else
+                                    <span class="bg-emerald-100 text-emerald-700 text-[10px] font-headline font-bold px-2.5 py-1 rounded-md border border-emerald-400 flex-shrink-0">
+                                        Tersedia
+                                    </span>
+                                @endif
+                            </div>
+
+                            <div class="w-full h-44 flex items-center justify-center p-2">
+                                <div class="w-full h-full border-2 border-secondary rounded-xl bg-white flex items-center justify-center p-0.5 shadow-[2px_2px_0px_0px_rgba(35,35,35,1)] overflow-hidden">
+                                    @if ($item->foto)
+                                        <img src="{{ asset('storage/' . $item->foto) }}" alt="{{ $item->nama_barang }}" loading="lazy" class="w-full h-full object-cover rounded-lg">
+                                    @else
+                                        <div class="w-full h-full bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-headline font-bold">
+                                            No Image
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-t-2 border-secondary p-4 bg-white">
+                            <h3 class="font-headline font-bold text-base text-secondary line-clamp-1" title="{{ $item->nama_barang }}">
+                                {{ $item->nama_barang }}
+                            </h3>
+                            <p class="text-xs font-body text-slate-600 mt-1 leading-relaxed line-clamp-2 min-h-[2.5rem]">
+                                {{ $item->deskripsi ?? 'Kode Produk: ' . $item->kode_barang . ' — Kebutuhan harian berkualitas di WaruMa.' }}
+                            </p>
+
+                            <div class="border-t border-slate-200 pt-3 mt-4 flex items-end justify-between">
+                                <div>
+                                    <span class="text-[10px] font-label text-slate-400 uppercase font-bold">HARGA</span>
+                                    <p class="font-headline font-extrabold text-base text-secondary">
+                                        Rp {{ number_format($item->harga_jual, 0, ',', '.') }}
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-[10px] font-label text-slate-400 uppercase font-bold">STOK TOKO</span>
+                                    @if ($isHabis)
+                                        <p class="font-headline font-bold text-xs text-rose-600">0 {{ $namaSatuan }}</p>
+                                    @elseif ($isMenipis)
+                                        <p class="font-headline font-bold text-xs text-amber-700">Sisa {{ $item->stok }} {{ $namaSatuan }}</p>
+                                    @else
+                                        <p class="font-headline font-bold text-xs text-emerald-600">{{ $item->stok }} {{ $namaSatuan }}</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="font-headline font-bold text-sm text-secondary group-hover:text-amber-600 transition-colors">
-                            Bumbu Dapur Lengkap
-                        </h3>
-                        <p class="text-[11px] font-body text-slate-500">Kecap, saus, bumbu instan & garam (3 Produk)</p>
+                @empty
+                    <div class="col-span-full bg-white border-2 border-secondary rounded-2xl p-8 text-center shadow-[4px_4px_0px_0px_rgba(35,35,35,1)]">
+                        <p class="font-headline font-bold text-secondary">Belum ada produk yang ditambahkan ke etalase.</p>
                     </div>
-                </a>
+                @endforelse
 
             </div>
+
+            {{-- BANNER CTA KATALOG LENGKAP --}}
+            <div class="bg-primary border-2 border-secondary rounded-2xl p-6 sm:p-8 shadow-[8px_8px_0px_0px_rgba(35,35,35,1)] flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div class="space-y-2 max-w-2xl">
+                    <span class="inline-block bg-white text-secondary text-[10px] sm:text-xs font-headline font-bold uppercase tracking-wider px-2.5 py-1 rounded border border-secondary">
+                        KATALOG LENGKAP WARUNG
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold font-headline text-secondary">
+                        Cek Semua Barang & Stok
+                    </h3>
+                    <p class="text-xs sm:text-sm font-body text-slate-900 leading-relaxed">
+                        Buka katalog publik WaruMa untuk melihat seluruh {{ $totalProduk }} produk, harga satuan/grosir, dan ketersediaan stok fisik — bebas cek tanpa login.
+                    </p>
+                </div>
+
+                <div class="w-full md:w-auto">
+                    <a href="{{ route('katalog.publik') }}" class="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-secondary text-white font-headline font-bold text-xs sm:text-sm px-6 py-3.5 rounded-xl border-2 border-secondary shadow-[3px_3px_0px_0px_rgba(255,255,255,0.3)] hover:bg-slate-800 transition-all">
+                        Buka Katalog Publik Lengkap ({{ $totalProduk }} Produk)
+                    </a>
+                </div>
+            </div>
+
         </div>
     </section>
 

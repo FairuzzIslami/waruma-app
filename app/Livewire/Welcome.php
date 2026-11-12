@@ -14,10 +14,13 @@ class Welcome extends Component
 {
     public function render()
     {
-        $kategoris = Kategori::all()->map(function ($kat) {
-            $kat->jumlah_produk = Barang::where('kategori_id', $kat->id)->count();
-            return $kat;
-        });
+        $kategoris = Kategori::where('nama_kategori', '!=', 'Lain-Lain')
+            ->take(8)
+            ->get()
+            ->map(function ($kat) {
+                $kat->jumlah_produk = Barang::where('kategori_id', $kat->id)->count();
+                return $kat;
+            });
 
         $produkTerkini = Barang::with(['kategori', 'satuan'])
             ->latest()
