@@ -121,8 +121,29 @@ class Dashboard extends Component
         $transaksiHariIni = Transaksi::with(['detailTransaksi:id,transaksi_id,barang_id,jumlah', 'detailTransaksi.barang:id,nama_barang'])
             ->select('id', 'kode_transaksi', 'tanggal_transaksi', 'total_harga')
             ->whereBetween('tanggal_transaksi', [$todayStart, $todayEnd])
-            ->orderBy('tanggal_transaksi', 'asc')
+            ->orderBy('tanggal_transaksi', 'desc')
             ->paginate(3);
+
+        // 4. PRODUK TERLARIS HARI INI (TOP 3)
+        $produkTerlaris = DB::table('detail_transaksi')
+            ->join('transaksi', 'detail_transaksi.transaksi_id', '=', 'transaksi.id')
+            ->join('barang', 'detail_transaksi.barang_id', '=', 'barang.id')
+            ->leftJoin('kategori', 'barang.kategori_id', '=', 'kategori.id')
+            ->leftJoin('satuan', 'barang.satuan_id', '=', 'satuan.id')
+            ->whereBetween('transaksi.tanggal_transaksi', [$todayStart, $todayEnd])
+            ->select(
+                'barang.id',
+                'barang.nama_barang',
+                'barang.foto',
+                'kategori.nama_kategori',
+                'satuan.nama_satuan',
+                DB::raw('SUM(detail_transaksi.jumlah) as total_terjual'),
+                DB::raw('SUM(detail_transaksi.jumlah * COALESCE(detail_transaksi.harga_satuan, barang.harga_jual, 0)) as total_kontribusi')
+            )
+            ->groupBy('barang.id', 'barang.nama_barang', 'barang.foto', 'kategori.nama_kategori', 'satuan.nama_satuan')
+            ->orderByDesc('total_terjual')
+            ->limit(3)
+            ->get();
 
         return view('livewire.admin.dashboard', [
             'summary'          => $summary,
@@ -130,6 +151,7 @@ class Dashboard extends Component
             'totalKategori'    => $totalKategori,
             'barangKritis'     => $barangKritis,
             'transaksiHariIni' => $transaksiHariIni,
+            'produkTerlaris'   => $produkTerlaris,
         ]);
     }
 }

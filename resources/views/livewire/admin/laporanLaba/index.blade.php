@@ -21,6 +21,7 @@
             <button wire:click="setPeriode('hari_ini')" class="px-3 py-2 border-2 border-secondary rounded-xl {{ $periode === 'hari_ini' ? 'bg-primary shadow-[2px_2px_0px_#232323]' : 'bg-gray-100' }} btn-brutal cursor-pointer font-headline">Hari Ini</button>
             <button wire:click="setPeriode('minggu_ini')" class="px-3 py-2 border-2 border-secondary rounded-xl {{ $periode === 'minggu_ini' ? 'bg-primary shadow-[2px_2px_0px_#232323]' : 'bg-gray-100' }} btn-brutal cursor-pointer font-headline">Minggu Ini</button>
             <button wire:click="setPeriode('bulan_ini')" class="px-3 py-2 border-2 border-secondary rounded-xl {{ $periode === 'bulan_ini' ? 'bg-primary shadow-[2px_2px_0px_#232323]' : 'bg-gray-100' }} btn-brutal cursor-pointer font-headline">Bulan Ini</button>
+            <button wire:click="setPeriode('semua')" class="px-3 py-2 border-2 border-secondary rounded-xl {{ $periode === 'semua' ? 'bg-primary shadow-[2px_2px_0px_#232323]' : 'bg-gray-100' }} btn-brutal cursor-pointer font-headline">Semua Data</button>
           </div>
 
           <!-- Custom Date Input -->
@@ -99,39 +100,72 @@
         </div>
 
         <!-- CARD 4: LABA KOTOR -->
-        <div class="kartu p-4 flex flex-col justify-between min-h-[135px] hover:-translate-y-0.5 transition-transform bg-emerald-50/30">
+        @php
+          $isLabaKotorRugi = $summary['labaKotor'] < 0;
+        @endphp
+        <div class="kartu p-4 flex flex-col justify-between min-h-[135px] hover:-translate-y-0.5 transition-transform {{ $isLabaKotorRugi ? 'bg-red-50/60' : 'bg-emerald-50/30' }}">
           <div>
             <div class="flex items-center justify-between gap-1 mb-1.5">
               <span class="text-[10px] font-black uppercase tracking-wider text-gray-500 font-headline">4. LABA KOTOR (GROSS)</span>
-              <span class="p-1.5 bg-green-100 border-2 border-secondary rounded-lg shadow-[1.5px_1.5px_0px_#232323]">
-                <img src="{{ asset('assets/icons/grafikNaikPenelusuran.svg') }}" alt="Laba Kotor" class="w-3.5 h-3.5 object-contain" />
+              <span class="p-1.5 {{ $isLabaKotorRugi ? 'bg-red-100' : 'bg-green-100' }} border-2 border-secondary rounded-lg shadow-[1.5px_1.5px_0px_#232323]">
+                <img src="{{ asset('assets/icons/grafikNaikPenelusuran.svg') }}" alt="Laba Kotor" class="w-3.5 h-3.5 object-contain {{ $isLabaKotorRugi ? 'rotate-180' : '' }}" />
               </span>
             </div>
-            <p class="text-xl xl:text-2xl font-black text-green-700 leading-tight flex items-baseline gap-1 truncate whitespace-nowrap">
-              <span class="text-xs xl:text-sm font-extrabold">Rp</span>{{ number_format($summary['labaKotor'], 0, ',', '.') }}
+            <p class="text-xl xl:text-2xl font-black {{ $isLabaKotorRugi ? 'text-[#CE1126]' : 'text-green-700' }} leading-tight flex items-baseline gap-1 truncate whitespace-nowrap">
+              @if($isLabaKotorRugi)<span class="text-sm font-black">-</span>@endif
+              <span class="text-xs xl:text-sm font-extrabold">Rp</span>{{ number_format(abs($summary['labaKotor']), 0, ',', '.') }}
             </p>
           </div>
-          <div class="pt-2 border-t border-emerald-100 flex items-center text-[10px] font-extrabold">
-            <span class="text-green-700 bg-green-100 px-1.5 py-0.5 rounded border border-green-300">Omzet - HPP Modal</span>
+          <div class="pt-2 border-t {{ $isLabaKotorRugi ? 'border-red-200' : 'border-emerald-100' }} flex items-center text-[10px] font-extrabold">
+            <span class="{{ $isLabaKotorRugi ? 'text-[#CE1126] bg-red-100 border-red-300' : 'text-green-700 bg-green-100 border-green-300' }} px-1.5 py-0.5 rounded border">
+              Omzet - HPP Modal
+            </span>
           </div>
         </div>
 
-        <!-- CARD 5: LABA BERSIH (HERO CARD) -->
-        <div class="kartu p-4 bg-primary flex flex-col justify-between min-h-[135px] hover:-translate-y-0.5 transition-transform relative overflow-hidden">
+        <!-- CARD 5: LABA / RUGI BERSIH (HERO CARD DINAMIS) -->
+        @php
+          $labaBersih = $summary['labaBersih'];
+          $isRugi     = $labaBersih < 0;
+          $isUntung   = $labaBersih > 0;
+
+          $cardBg     = $isRugi ? 'bg-[#CE1126]' : ($isUntung ? 'bg-primary' : 'bg-white');
+          $textColor  = $isRugi ? 'text-white' : 'text-secondary';
+          $borderLine = $isRugi ? 'border-white/25' : 'border-secondary/20';
+          $statusText = $isRugi ? 'RUGI' : ($isUntung ? 'UNTUNG' : 'IMPAS');
+          $badgeStyle = $isRugi
+              ? 'bg-white text-[#CE1126] border-secondary'
+              : ($isUntung ? 'bg-emerald-400 text-secondary border-secondary' : 'bg-gray-100 text-secondary border-secondary');
+        @endphp
+
+        <div class="kartu p-4 {{ $cardBg }} flex flex-col justify-between min-h-[135px] hover:-translate-y-0.5 transition-all relative overflow-hidden">
           <div>
             <div class="flex items-center justify-between gap-1 mb-1.5">
-              <span class="px-2 py-0.5 border-2 border-secondary rounded-lg bg-white text-[9px] font-black uppercase shadow-[1.5px_1.5px_0px_#232323] font-headline">5. HASIL BERSIH</span>
-              <span class="p-1.5 bg-white border-2 border-secondary rounded-lg shadow-[1.5px_1.5px_0px_#232323]">
-                <img src="{{ asset('assets/icons/uang.svg') }}" alt="Hasil Bersih" class="w-3.5 h-3.5 object-contain" />
+              <span class="px-2 py-0.5 border-2 border-secondary rounded-lg bg-white text-secondary text-[9px] font-black uppercase shadow-[1.5px_1.5px_0px_#232323] font-headline">
+                5. HASIL BERSIH
+              </span>
+
+              <!-- BADGE INDIKATOR RUGI / UNTUNG -->
+              <span class="px-2 py-0.5 border-2 rounded-lg text-[9px] font-black uppercase shadow-[1.5px_1.5px_0px_#232323] font-headline tracking-wider {{ $badgeStyle }}">
+                {{ $statusText }}
               </span>
             </div>
-            <p class="text-xl xl:text-2xl font-black text-secondary leading-tight flex items-baseline gap-1 truncate whitespace-nowrap mt-1">
-              <span class="text-xs xl:text-sm font-extrabold">Rp</span>{{ number_format($summary['labaBersih'], 0, ',', '.') }}
+
+            <p class="text-xl xl:text-2xl font-black {{ $textColor }} leading-tight flex items-baseline gap-1 truncate whitespace-nowrap mt-2">
+              @if($isRugi)
+                <span class="text-base xl:text-lg font-black">-</span>
+              @endif
+              <span class="text-xs xl:text-sm font-extrabold opacity-90">Rp</span>{{ number_format(abs($labaBersih), 0, ',', '.') }}
             </p>
           </div>
-          <div class="pt-2 border-t border-secondary/20 flex items-center justify-between text-[10px] font-black text-secondary">
-            <span class="font-headline">KAS RIIL TOKO</span>
-            <span class="bg-white/90 px-1.5 py-0.5 rounded-md border border-secondary text-[9px]">Tepat</span>
+
+          <div class="pt-2 border-t {{ $borderLine }} flex items-center justify-between text-[10px] font-black {{ $textColor }}">
+            <span class="font-headline uppercase tracking-wide">
+              {{ $isRugi ? 'DEFISIT KAS TOKO' : ($isUntung ? 'PROFIT BERSIH TOKO' : 'BELUM ADA MARGIN') }}
+            </span>
+            <span class="bg-white text-secondary px-1.5 py-0.5 rounded-md border border-secondary text-[9px] font-extrabold">
+              {{ $isRugi ? 'Minus' : ($isUntung ? 'Surplus' : '0') }}
+            </span>
           </div>
         </div>
 
@@ -186,50 +220,96 @@
           </div>
         </div>
 
-        <!-- KOLOM KANAN: RINCIAN TRANSAKSI PENJUALAN -->
-        <div class="lg:col-span-7 kartu p-4 space-y-3.5">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-secondary pb-2.5">
-            <div class="flex items-center gap-2">
-              <img src="{{ asset('assets/icons/catatanCoklat.svg') }}" alt="Transaksi" class="w-4 h-4 object-contain" />
-              <h3 class="font-extrabold text-xs sm:text-sm uppercase text-secondary font-headline">RINCIAN TRANSAKSI PENJUALAN</h3>
+        <!-- KOLOM KANAN: RINCIAN LABA TRANSAKSI TERAKHIR -->
+        <div class="lg:col-span-7 kartu p-4 sm:p-5 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <img src="{{ asset('assets/icons/catatanCoklat.svg') }}" alt="Transaksi" class="w-4 h-4 object-contain" />
+                <h3 class="font-black text-xs sm:text-sm uppercase text-secondary font-headline tracking-wide">
+                  RINCIAN LABA TRANSAKSI TERAKHIR
+                </h3>
+              </div>
+              <p class="text-[11px] font-semibold text-gray-500 mt-1">
+                Perhitungan otomatis Harga Jual - HPP Modal = Margin Laba Bersih Transaksi.
+              </p>
             </div>
-            <div class="relative w-full sm:w-auto">
-              <input type="text" wire:model.live.debounce.300ms="searchStruk" placeholder="Cari No. Struk..." class="w-full sm:w-40 pl-7 pr-2 py-1 border-2 border-secondary rounded-xl text-xs font-bold bg-white outline-none shadow-[2px_2px_0px_#232323]">
-              <img src="{{ asset('assets/icons/search.svg') }}" alt="Cari" class="w-3 h-3 object-contain absolute left-2.5 top-2 text-gray-400" />
+
+            <div class="relative w-full sm:w-48 shrink-0">
+              <input type="text" wire:model.live.debounce.300ms="searchStruk" placeholder="Cari No. Struk / Item..."
+                class="w-full pl-8 pr-3 py-1.5 border-2 border-secondary rounded-xl text-xs font-bold bg-white outline-none shadow-[2px_2px_0px_#232323] focus:bg-amber-50/30 transition-colors">
+              <img src="{{ asset('assets/icons/search.svg') }}" alt="Cari" class="w-3.5 h-3.5 object-contain absolute left-2.5 top-2 text-gray-400" />
             </div>
           </div>
 
           <!-- TABEL TRANSAKSI -->
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs min-w-[320px]">
+          <div class="overflow-x-auto border-t-2 border-secondary">
+            <table class="w-full text-left text-xs min-w-[540px]">
               <thead>
-                <tr class="border-b-2 border-secondary text-secondary font-black uppercase text-[10px] font-headline">
-                  <th class="py-2 px-1">NO. STRUK / WAKTU</th>
-                  <th class="py-2 px-1">ITEM TERJUAL</th>
-                  <th class="py-2 px-1 text-right">TOTAL</th>
+                <tr class="bg-gray-100/80 border-b border-gray-200 text-secondary font-black uppercase text-[10px] font-headline tracking-wider">
+                  <th class="py-2.5 px-2.5">NO. STRUK / WAKTU</th>
+                  <th class="py-2.5 px-2.5">ITEM TERJUAL</th>
+                  <th class="py-2.5 px-2.5 text-right">HARGA JUAL</th>
+                  <th class="py-2.5 px-2.5 text-right">MODAL (HPP)</th>
+                  <th class="py-2.5 px-2.5 text-right">MARGIN LABA</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200">
                 @forelse($transaksiList as $trx)
-                  <tr>
-                    <td class="py-2.5 px-1 align-top">
-                      <div class="font-black text-secondary">{{ $trx->kode_transaksi }}</div>
-                      <div class="text-[9px] sm:text-[10px] font-semibold text-gray-500">
+                  @php
+                    $hargaJual = $trx->total_harga;
+                    $totalHpp  = $trx->detailTransaksi->sum(fn($dt) => ($dt->harga_beli ?? 0) * $dt->jumlah);
+                    $labaTrx   = $hargaJual - $totalHpp;
+                    $persen    = $hargaJual > 0 ? ($labaTrx / $hargaJual) * 100 : 0;
+                    $isTrxRugi = $labaTrx < 0;
+                  @endphp
+                  <tr class="hover:bg-amber-50/40 transition-colors">
+                    <!-- NO STRUK & WAKTU -->
+                    <td class="py-3 px-2.5 align-top whitespace-nowrap">
+                      <div class="font-black text-secondary font-headline">#{{ $trx->kode_transaksi }}</div>
+                      <div class="text-[10px] font-semibold text-gray-500 mt-0.5">
                         {{ \Carbon\Carbon::parse($trx->tanggal_transaksi)->translatedFormat('H:i \W\I\B • d M Y') }}
                       </div>
                     </td>
-                    <td class="py-2.5 px-1 align-top">
-                      @foreach($trx->detailTransaksi as $dt)
-                        <div class="font-bold text-secondary">{{ $dt->barang->nama_barang ?? 'Barang Dihapus' }} (x{{ $dt->jumlah }})</div>
-                      @endforeach
+
+                    <!-- ITEM TERJUAL -->
+                    <td class="py-3 px-2.5 align-top">
+                      <div class="space-y-0.5">
+                        @foreach($trx->detailTransaksi as $dt)
+                          <div class="font-bold text-secondary leading-snug">
+                            {{ $dt->barang->nama_barang ?? 'Barang Dihapus' }} (x{{ $dt->jumlah }})
+                          </div>
+                        @endforeach
+                      </div>
                     </td>
-                    <td class="py-2.5 px-1 align-top text-right font-black text-secondary">
-                      Rp {{ number_format($trx->total_harga, 0, ',', '.') }}
+
+                    <!-- HARGA JUAL -->
+                    <td class="py-3 px-2.5 align-top text-right whitespace-nowrap">
+                      <div class="font-black text-secondary">
+                        Rp {{ number_format($hargaJual, 0, ',', '.') }}
+                      </div>
+                    </td>
+
+                    <!-- MODAL (HPP) -->
+                    <td class="py-3 px-2.5 align-top text-right whitespace-nowrap">
+                      <div class="font-bold text-gray-500">
+                        Rp {{ number_format($totalHpp, 0, ',', '.') }}
+                      </div>
+                    </td>
+
+                    <!-- MARGIN LABA -->
+                    <td class="py-3 px-2.5 align-top text-right whitespace-nowrap">
+                      <div class="font-black {{ $isTrxRugi ? 'text-[#CE1126]' : 'text-emerald-700' }}">
+                        {{ $isTrxRugi ? '-Rp ' : '+Rp ' }}{{ number_format(abs($labaTrx), 0, ',', '.') }}
+                      </div>
+                      <div class="text-[10px] font-bold {{ $isTrxRugi ? 'text-[#CE1126]/80' : 'text-gray-400' }}">
+                        ({{ number_format($persen, 1) }}%)
+                      </div>
                     </td>
                   </tr>
                 @empty
                   <tr>
-                    <td colspan="3" class="py-4 text-center font-bold text-gray-400">Tidak ada transaksi ditemukan.</td>
+                    <td colspan="5" class="py-6 text-center font-bold text-gray-400">Tidak ada transaksi ditemukan.</td>
                   </tr>
                 @endforelse
               </tbody>

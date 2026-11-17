@@ -304,7 +304,6 @@
                 <div class="space-y-1.5">
                     <div class="flex justify-between text-[10px] font-extrabold uppercase">
                         <span class="text-gray-600">UANG TUNAI DITERIMA</span>
-                        <span wire:click="setUangPas" class="text-amber-800 cursor-pointer hover:underline">Uang Pas (Rp {{ number_format($this->totalHarga, 0, ',', '.') }})</span>
                     </div>
 
                     <!-- INPUT Uang Tunai (PLACEHOLDER TEXT) -->
@@ -320,7 +319,7 @@
 
                     <!-- QUICK CASH BUTTONS -->
                     <div class="grid grid-cols-4 gap-1 pt-0.5">
-                        <button wire:click="setBayar(10000)" class="btn-brutal rounded py-1 text-[10px] font-bold cursor-pointer {{ (int)str_replace('.', '', (string)$bayar) == 10000 ? 'bg-kuning' : 'bg-white' }}">10.000</button>
+                        <button wire:click="setUangPas" class="btn-brutal rounded py-1 text-[10px] font-extrabold cursor-pointer {{ (int)str_replace('.', '', (string)$bayar) == $this->totalHarga && $this->totalHarga > 0 ? 'bg-kuning' : 'bg-white' }} text-hitam">Uang Pas</button>
                         <button wire:click="setBayar(20000)" class="btn-brutal rounded py-1 text-[10px] font-bold cursor-pointer {{ (int)str_replace('.', '', (string)$bayar) == 20000 ? 'bg-kuning' : 'bg-white' }}">20.000</button>
                         <button wire:click="setBayar(50000)" class="btn-brutal rounded py-1 text-[10px] font-bold cursor-pointer {{ (int)str_replace('.', '', (string)$bayar) == 50000 ? 'bg-kuning' : 'bg-white' }}">50.000</button>
                         <button wire:click="setBayar(100000)" class="btn-brutal rounded py-1 text-[10px] font-bold cursor-pointer {{ (int)str_replace('.', '', (string)$bayar) == 100000 ? 'bg-kuning' : 'bg-white' }}">100.000</button>

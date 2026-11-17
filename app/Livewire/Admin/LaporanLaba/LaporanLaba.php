@@ -22,7 +22,7 @@ class LaporanLaba extends Component
     protected $paginationTheme = 'tailwind';
 
     // State Filter Periode
-    public $periode = 'minggu_ini'; // 'hari_ini', 'minggu_ini', 'bulan_ini', 'custom'
+    public $periode = 'minggu_ini'; // 'hari_ini', 'minggu_ini', 'bulan_ini', 'semua', 'custom'
     public $startDate;
     public $endDate;
 
@@ -63,6 +63,15 @@ class LaporanLaba extends Component
         } elseif ($mode === 'bulan_ini') {
             $this->startDate = $now->copy()->startOfMonth()->format('Y-m-d');
             $this->endDate   = $now->copy()->endOfMonth()->format('Y-m-d');
+        } elseif ($mode === 'semua') {
+            $earliestTrx = Transaksi::min('tanggal_transaksi');
+            $earliestOps = Operasional::min('tanggal_operasional');
+
+            $dates = array_filter([$earliestTrx, $earliestOps]);
+            $this->startDate = !empty($dates)
+                ? Carbon::parse(min($dates))->format('Y-m-d')
+                : $now->format('Y-m-d');
+            $this->endDate = $now->format('Y-m-d');
         }
 
         $this->resetPage();
@@ -143,7 +152,6 @@ class LaporanLaba extends Component
         $this->showModalOperasional = false;
         $this->resetFormOperasional();
 
-        // Notifikasi Tambah / Edit
         $pesan = $isEdit ? 'Biaya operasional berhasil diperbarui!' : 'Biaya operasional berhasil dicatat!';
         $this->dispatch('notif-sukses', message: $pesan);
     }
@@ -160,11 +168,9 @@ class LaporanLaba extends Component
             Operasional::where('id', $this->operasionalId)->delete();
             $this->resetFormOperasional();
 
-            // Tutup semua modal operasional
             $this->showModalDeleteOperasional = false;
             $this->showModalOperasional = false;
 
-            // Notifikasi Hapus
             $this->dispatch('notif-sukses', message: 'Biaya operasional berhasil dihapus!');
         }
     }
@@ -178,17 +184,22 @@ class LaporanLaba extends Component
     // Perhitungan Ringkasan Finansial
     private function getFinancialSummary()
     {
+        $isAllTime = $this->periode === 'semua';
         $start = Carbon::parse($this->startDate)->startOfDay();
         $end   = Carbon::parse($this->endDate)->endOfDay();
 
-        $omzet = Transaksi::whereBetween('tanggal_transaksi', [$start, $end])->sum('total_harga') ?? 0;
-        $totalStruk = Transaksi::whereBetween('tanggal_transaksi', [$start, $end])->count();
+        $omzet = Transaksi::when(!$isAllTime, fn($q) => $q->whereBetween('tanggal_transaksi', [$start, $end]))
+            ->sum('total_harga') ?? 0;
 
-        $hpp = DetailTransaksi::whereHas('transaksi', function ($q) use ($start, $end) {
-            $q->whereBetween('tanggal_transaksi', [$start, $end]);
+        $totalStruk = Transaksi::when(!$isAllTime, fn($q) => $q->whereBetween('tanggal_transaksi', [$start, $end]))
+            ->count();
+
+        $hpp = DetailTransaksi::whereHas('transaksi', function ($q) use ($isAllTime, $start, $end) {
+            $q->when(!$isAllTime, fn($sub) => $sub->whereBetween('tanggal_transaksi', [$start, $end]));
         })->sum(DB::raw('harga_beli * jumlah')) ?? 0;
 
-        $operasional = Operasional::whereBetween('tanggal_operasional', [$this->startDate, $this->endDate])->sum('nominal') ?? 0;
+        $operasional = Operasional::when(!$isAllTime, fn($q) => $q->whereBetween('tanggal_operasional', [$this->startDate, $this->endDate]))
+            ->sum('nominal') ?? 0;
 
         $labaKotor  = $omzet - $hpp;
         $labaBersih = $labaKotor - $operasional;
@@ -206,19 +217,29 @@ class LaporanLaba extends Component
     public function render()
     {
         $summary = $this->getFinancialSummary();
+        $isAllTime = $this->periode === 'semua';
 
         $transaksiList = Transaksi::with(['detailTransaksi.barang'])
             ->when($this->searchStruk, function ($q) {
-                $q->where('kode_transaksi', 'like', '%' . $this->searchStruk . '%');
+                $q->where(function ($sub) {
+                    $sub->where('kode_transaksi', 'like', '%' . $this->searchStruk . '%')
+                        ->orWhereHas('detailTransaksi.barang', function ($b) {
+                            $b->where('nama_barang', 'like', '%' . $this->searchStruk . '%');
+                        });
+                });
             })
-            ->whereBetween('tanggal_transaksi', [
-                Carbon::parse($this->startDate)->startOfDay(),
-                Carbon::parse($this->endDate)->endOfDay()
-            ])
+            ->when(!$isAllTime, function ($q) {
+                $q->whereBetween('tanggal_transaksi', [
+                    Carbon::parse($this->startDate)->startOfDay(),
+                    Carbon::parse($this->endDate)->endOfDay()
+                ]);
+            })
             ->orderBy('tanggal_transaksi', 'desc')
             ->paginate(5);
 
-        $operasionalList = Operasional::whereBetween('tanggal_operasional', [$this->startDate, $this->endDate])
+        $operasionalList = Operasional::when(!$isAllTime, function ($q) {
+                $q->whereBetween('tanggal_operasional', [$this->startDate, $this->endDate]);
+            })
             ->orderBy('tanggal_operasional', 'desc')
             ->get();
 

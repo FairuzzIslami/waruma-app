@@ -194,8 +194,7 @@
                         $iconBg = $index % 2 === 0 ? 'bg-primary' : 'bg-white';
                     @endphp
 
-                    <a href="{{ route('katalog.publik', ['kategori' => $kategori->id]) }}"
-                    class="bg-white border-2 border-secondary rounded-2xl p-3.5 flex items-center gap-3.5 shadow-[4px_4px_0px_0px_rgba(35,35,35,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(35,35,35,1)] transition-all group">
+                    <div class="bg-white border-2 border-secondary rounded-2xl p-3.5 flex items-center gap-3.5 shadow-[4px_4px_0px_0px_rgba(35,35,35,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(35,35,35,1)] transition-all group cursor-default">
 
                         <div class="w-10 h-10 {{ $iconBg }} border-2 border-secondary rounded-xl flex items-center justify-center p-2 flex-shrink-0 shadow-[2px_2px_0px_0px_rgba(35,35,35,1)]">
                             <img src="{{ asset('assets/icons/' . $iconFile) }}" alt="{{ $namaKat }}" loading="lazy" class="w-full h-full object-contain">
@@ -209,7 +208,7 @@
                                 {{ $kategori->jumlah_produk }} Produk
                             </p>
                         </div>
-                    </a>
+                    </div>
                 @endforeach
             </div>
 

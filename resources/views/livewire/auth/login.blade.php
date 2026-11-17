@@ -118,9 +118,14 @@
                     <div class="flex-grow border-t border-gray-300"></div>
                 </div>
 
-                <x-button tag="a" href="{{ route('katalog.publik') }}" wire:navigate variant="secondary" size="lg" class="w-full text-sm">
-                    <span>Lihat info & stok tanpa login</span>
-                </x-button>
+                <div class="space-y-4">
+                    <x-button tag="a" href="{{ route('katalog.publik') }}" wire:navigate variant="secondary" size="lg" class="w-full text-sm">
+                        <span>Lihat info & stok tanpa login</span>
+                    </x-button>
+
+                    <x-button tag="a" href="{{ route('home') }}" wire:navigate variant="primary" size="lg" class="w-full text-sm">
+                        <span>Kembali ke Halaman Utama</span>
+                    </x-button>
             </div>
         </div>
 
